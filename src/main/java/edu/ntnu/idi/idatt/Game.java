@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt;
 
-public class Main {
+public class Game {
   public static void main(String[] args) {
-    System.out.println("master test");
+    System.out.println("Do you wanna play a game?");
   }
 }
