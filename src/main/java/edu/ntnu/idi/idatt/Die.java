@@ -19,8 +19,4 @@ public class Die {
         return lastRolledValue;
     }
 
-
-
-
-
 }
