@@ -6,7 +6,7 @@ public class Dice {
     private ArrayList<Die> dice;
 
     public Dice(int numberOfDice){
-        if(numberOfDice > 1){
+        if(numberOfDice < 1){
             throw new IllegalArgumentException("You must have at least 1 die");
         }
         dice = new ArrayList<>();
@@ -31,7 +31,4 @@ public class Dice {
     public int getNumberOfDice(){
         return dice.size();
     }
-
-
-
 }
