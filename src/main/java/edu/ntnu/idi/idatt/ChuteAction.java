@@ -1,15 +1,15 @@
 package edu.ntnu.idi.idatt;
 
 public class ChuteAction implements TileAction{
-  private int endPosition;
+  private int destinationTileId;
 
-  public ChuteAction(int endPosition){
-    this.endPosition = endPosition;
+  public ChuteAction(int destinationTileId){
+    this.destinationTileId = destinationTileId;
   }
 
   @Override
-  public int performAction (int currentPosition) {
-    System.out.println("Chute to position: " + endPosition);
-    return endPosition;
+  public void perform (Player player) {
+    System.out.println(player.getName() + " chutes to tile " + destinationTileId);
+    player.setCurrentTileID(destinationTileId);
   }
 }
