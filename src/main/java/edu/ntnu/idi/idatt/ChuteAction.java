@@ -10,6 +10,12 @@ public class ChuteAction implements TileAction{
   @Override
   public void perform (Player player) {
     System.out.println(player.getName() + " chutes to tile " + destinationTileId);
-    player.setCurrentTileID(destinationTileId);
+    Tile destinationTile = player.getGame().getBoard().getTile(destinationTileId);
+
+    if (destinationTile != null) {
+      player.placeOnTile(destinationTile);
+    } else {
+      throw new IllegalStateException("Destination tile " + destinationTileId + " not found");
+    }
   }
 }
