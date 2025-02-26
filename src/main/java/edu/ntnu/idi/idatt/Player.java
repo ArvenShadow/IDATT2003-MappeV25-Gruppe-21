@@ -1,10 +1,24 @@
 package edu.ntnu.idi.idatt;
 
 public class Player {
+  BoardGame game;
   String name;
-  int position;
+  Tile currentTile;
 
-  void move(int steps) {
-    position += steps;
+  public Player(String name, BoardGame game) {
+    this.name = name;
+    this.game = game;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void placeOnTile(Tile tile) {
+    currentTile = tile;
+  }
+
+  public void move(int steps) {
+
   }
 }
