@@ -38,4 +38,16 @@ public class BoardGame {
     return board;
   }
 
+  public Player getCurrentPlayer() {
+    return currentPlayer;
+  }
+
+  public List<Player> getPlayers() {
+    return players;
+  }
+
+  public Dice getDice() {
+    return dice;
+  }
+
 }
