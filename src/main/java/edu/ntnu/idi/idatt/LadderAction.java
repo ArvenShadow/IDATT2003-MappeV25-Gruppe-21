@@ -18,7 +18,7 @@ public class LadderAction implements TileAction{
 
     String actionType = isLadder ? "climbs ladder" : "slides down chute";
 
-    System.out.println(player.getName() + " " + actionType + "to tile " + destinationTileId);
+    System.out.println(player.getName() + " " + actionType + " to tile " + destinationTileId);
 
     Tile destinationTile = player.getGame().getBoard().getTile(destinationTileId);
     if (destinationTile != null) {
