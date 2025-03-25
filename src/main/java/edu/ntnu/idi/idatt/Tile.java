@@ -6,17 +6,30 @@ public class Tile {
 
   private int tileId;
   private Tile nextTile;
-
   private TileAction tileAction;
 
-  public Tile(int tileId){
+  private int row;
+  private int col;
+
+  public Tile(int tileId, int row, int col){
+    this.row = row;
+    this.col = col;
     this.tileId = tileId;
     this.nextTile = null;
+    this.tileAction = null;
   }
 
   public int getTileId(){
     return tileId;
   }
+
+  public int getRow(){
+    return row;
+  }
+  public int getCol(){
+    return col;
+  }
+
 
   public Tile getNextTile(){
     return nextTile;
@@ -32,9 +45,12 @@ public class Tile {
 
   public void landAction(Player player) {
     if (tileAction != null) {
-      tileAction.perform(player);
-    } else {
-      System.out.println("No action for tile " + tileId);
+      try {
+        tileAction.perform(player);
+      } catch (Exception e) {
+        System.out.println("Error performing tile action for tile " + tileId + e.getMessage());
+        e.printStackTrace();
+      }
     }
   }
 
