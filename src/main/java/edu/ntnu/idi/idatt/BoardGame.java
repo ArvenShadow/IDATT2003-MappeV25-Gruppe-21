@@ -7,7 +7,7 @@ import java.util.List;
 public class BoardGame {
   private Board board;
   private Player currentPlayer;
-  private List<Player> players;
+  private final List<Player> players = new ArrayList<>();
   private Dice dice;
   private boolean gameFinished = false;
   private Player winner = null;
