@@ -15,11 +15,6 @@ public class BoardGame {
 
   private List<BoardGameObserver> observers = new ArrayList<>();
 
-  public BoardGame(int rows, int cols) {
-    this.board = new Board(rows, cols);
-    this.players = new ArrayList<>();
-  }
-
   public void addPlayer(Player player) {
     players.add(player);
   }
