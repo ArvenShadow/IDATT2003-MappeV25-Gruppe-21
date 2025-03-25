@@ -11,7 +11,7 @@ public class BoardGame {
   private Dice dice;
   private boolean gameFinished = false;
   private Player winner = null;
-  private final int finalTileId = 90;
+  private final int finalTileId = 100;
 
   private List<BoardGameObserver> observers = new ArrayList<>();
 

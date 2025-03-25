@@ -2,7 +2,7 @@ package edu.ntnu.idi.idatt;
 
 public class BoardGameFactory {
   public static Board createBoard() {
-    Board board = new Board(9, 10);
+    Board board = new Board(10, 10);
     board.setupGameBoard();
 
     //Ladders
