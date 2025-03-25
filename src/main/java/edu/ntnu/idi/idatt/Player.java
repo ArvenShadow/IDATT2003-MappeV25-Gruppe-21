@@ -4,16 +4,17 @@ public class Player {
   private String name;
   private Tile currentTile;
   private BoardGame game;
+  private String tokenType; // TopHat, RaceCar etc..
 
-  public Player(String name, BoardGame game) {
+  public Player(String name, BoardGame game, String tokenType) {
     this.name = name;
     this.game = game;
+    this.tokenType = tokenType;
   }
 
   public void placeOnTile(Tile tile) {
     this.currentTile = tile;
-
-    System.out.println(name + " is place on tile" + tile.getTileId());
+    System.out.println(name + " is place on tile " + tile.getTileId());
   }
 
   public void move(int steps) {
@@ -35,6 +36,11 @@ public class Player {
       throw new IllegalStateException("No tile at position " + newPosition);
     }
   }
+
+  public boolean hasWon(int finalTileId) {
+    return currentTile != null && currentTile.getTileId() >= finalTileId;
+  }
+
   public String getName() {
     return name;
   }
@@ -46,4 +52,9 @@ public class Player {
   public BoardGame getGame() {
     return game;
   }
+
+  public String getTokenType() {
+    return tokenType;
+  }
+
 }
