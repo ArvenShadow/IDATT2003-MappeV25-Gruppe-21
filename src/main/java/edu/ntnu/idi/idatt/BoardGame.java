@@ -113,4 +113,7 @@ public class BoardGame {
     }
   }
 
+  public void createBoard() {
+    this.board = BoardGameFactory.createBoard();
+  }
 }
