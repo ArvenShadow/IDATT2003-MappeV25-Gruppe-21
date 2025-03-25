@@ -12,7 +12,7 @@ public class BoardGameApp {
 
     // Legg til spillere
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Velkommen til Stigespillet!");
+    System.out.println("Velkommen til Stigespillet!!");
     System.out.print("Antall spillere: ");
     int antallSpillere = scanner.nextInt();
     scanner.nextLine(); // Consume newline
