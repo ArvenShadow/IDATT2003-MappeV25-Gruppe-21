@@ -3,14 +3,20 @@ package edu.ntnu.idi.idatt;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BoardGame {
   private Board board;
   private Player currentPlayer;
   private List<Player> players;
   private Dice dice;
+  private boolean gameFinished = false;
+  private Player winner = null;
+  private final int finalTileId = 90;
 
-  public BoardGame() {
-    this.board = new Board();
+  private List<BoardGameObserver> observers = new ArrayList<>();
+
+  public BoardGame(int rows, int cols) {
+    this.board = new Board(rows, cols);
     this.players = new ArrayList<>();
   }
 
@@ -18,16 +24,59 @@ public class BoardGame {
     players.add(player);
   }
 
-  public void createBoard() {
-    for (int i = 1; i <= 100; i++) {
-      Tile tile = new Tile(i);
-      if (i == 5) {
-        tile.setTileAction(new LadderAction(10));
-      } else if (i == 11) {
-        tile.setTileAction(new ChuteAction(6));
-      }
-      board.addTile(tile);
+  public void createBoard(int rows, int cols) {
+    this.board = new Board(rows, cols);
+    this.board.setupGameBoard();
+
+    setupLaddersAndChutes();
+  }
+
+  private void setupLaddersAndChutes() {
+    Tile ladder = board.getTile(4);
+    if (ladder != null) {
+      ladder.setTileAction(new LadderAction(14));
     }
+    Tile chute = board.getTile(17);
+    if (chute != null) {
+      chute.setTileAction(new ChuteAction(7));
+    }
+  }
+
+  public void playOneRound() {
+    if (gameFinished) {
+      return;
+    }
+
+    for (Player player : players) {
+      if (gameFinished) {
+        break;
+      }
+
+      currentPlayer = player;
+      int roll = dice.Roll();
+      try {
+        Tile oldTile = player.getCurrentTile();
+        player.move(roll);
+        if (player.hasWon(finalTileId)) {
+          gameFinished = true;
+          winner = player;
+          System.out.println(player.getName() + " has won! Everyone else sucks!");
+
+          notifyObservers(new GameEvent(GameEvent.EventType.GAME_OVER, player, oldTile, player.getCurrentTile()));
+        }
+
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+      }
+    }
+  }
+
+  public boolean isFinished() {
+    return gameFinished;
+  }
+
+  public Player getWinner() {
+    return winner;
   }
 
   public void createDice() {
@@ -48,6 +97,20 @@ public class BoardGame {
 
   public Dice getDice() {
     return dice;
+  }
+
+  public void addObserver(BoardGameObserver observer) {
+    observers.add(observer);
+  }
+
+  public void removeObserver(BoardGameObserver observer) {
+    observers.remove(observer);
+  }
+
+  public void notifyObservers(GameEvent event) {
+    for (BoardGameObserver observer : observers) {
+      observer.update(event);
+    }
   }
 
 }
