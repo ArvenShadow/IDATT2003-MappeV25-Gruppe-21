@@ -14,6 +14,9 @@ public class BoardGame {
   private final int finalTileId = 90;
 
   private List<BoardGameObserver> observers = new ArrayList<>();
+  public BoardGame() {
+    players = new ArrayList<>();
+  }
 
   public void addPlayer(Player player) {
     players.add(player);
