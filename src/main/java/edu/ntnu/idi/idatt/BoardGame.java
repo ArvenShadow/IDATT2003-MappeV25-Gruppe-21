@@ -7,17 +7,14 @@ import java.util.List;
 public class BoardGame {
   private Board board;
   private Player currentPlayer;
-  private List<Player> players;
+  private List<Player> players = new ArrayList<>();
   private Dice dice;
   private boolean gameFinished = false;
   private Player winner = null;
   private final int finalTileId = 90;
-  private BoardGame boardGame;
 
   private List<BoardGameObserver> observers = new ArrayList<>();
-  public BoardGame() {
-    players = new ArrayList<>();
-  }
+
 
   public void addPlayer(Player player) {
     players.add(player);
@@ -72,13 +69,15 @@ public class BoardGame {
     }
   }
 
+
+
   public void addPlayersFromFile() {
     try {
-      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(this);
       List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
 
       for (Player player : csvPlayers) {
-        boardGame.addPlayer(player);
+        this.addPlayer(player);
         System.out.println(player.getName() + " added to game, as: " + player.getTokenType());
       }
 
@@ -87,14 +86,25 @@ public class BoardGame {
     }
   }
 
+  public void savePlayersToFile() {
+    try {
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(this);
+      csvHandler.writeToFile(players, "Test_users.csv");
+    } catch (BoardGameException e) {
+      e.printStackTrace();
+    }
+  }
+
   public void viewPlayersFromFile() {
     try {
-      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(this);
       List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
       System.out.println("Players saved from previous games :");
+      int playerNumber = 1;
 
       for (Player player : csvPlayers) {
-        System.out.println(player.getName() + ", " + player.getTokenType());
+        System.out.println(playerNumber + " "+player.getName() + ", " + player.getTokenType());
+        playerNumber++;
       }
 
 

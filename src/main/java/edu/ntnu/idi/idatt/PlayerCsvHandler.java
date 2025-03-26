@@ -1,23 +1,23 @@
 package edu.ntnu.idi.idatt;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PlayerCsvHandler implements FileHandler<List<Player>> {
 
 
-   private BoardGame game;
+    private BoardGame game;
 
-   public PlayerCsvHandler(BoardGame game){
-       this.game = game;
-   }
+    public PlayerCsvHandler(BoardGame game) {
+        this.game = game;
+    }
 
     @Override
     public List<Player> readFromFile(String fileName) throws BoardGameException {
-       String file = "src\\Test_users.csv";
+        String file = "src\\Test_users.csv";
         List<Player> players = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -70,6 +70,46 @@ public class PlayerCsvHandler implements FileHandler<List<Player>> {
 
     @Override
     public void writeToFile(List<Player> data, String filename) throws BoardGameException {
+        String file = "src\\Test_users.csv";
+        try {
 
+            List<Player> existingPlayers = readFromFile(filename);
+
+
+            Set<Player> uniquePlayers = new HashSet<>(existingPlayers);
+
+            // Legg til nye spillere
+            for (Player newPlayer : data) {
+                // Sjekk om spilleren allerede eksisterer basert på navn og token
+                boolean playerExists = existingPlayers.stream()
+                        .anyMatch(p -> p.getName().equals(newPlayer.getName()) &&
+                                p.getTokenType().equals(newPlayer.getTokenType()));
+
+                if (!playerExists) {
+                    uniquePlayers.add(newPlayer);
+                }
+            }
+
+            // Skriv alle unike spillere til filen
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Skriv header
+                writer.write("Player,PlayerToken");
+                writer.newLine();
+
+                // Skriv spillere
+                for (Player player : uniquePlayers) {
+                    String line = player.getName() + "," + player.getTokenType();
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                System.out.println("Spillere lagret i " + file);
+            }
+        } catch (BoardGameException | IOException e) {
+            throw new BoardGameException("Kunne ikke skrive til fil " + filename, e);
+        }
     }
 }
+
+
+

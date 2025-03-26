@@ -34,20 +34,87 @@ public class BoardGameApp {
     // Create dice
     boardGame.createDice();
 
-    boardGame.viewPlayersFromFile();
+    //boardGame.viewPlayersFromFile();
 
-    boardGame.addPlayersFromFile();
+    //boardGame.addPlayersFromFile();
+
+    oldOrNewPlayers();
 
     // Add players
-    addPlayers();
+    //addPlayers();
 
     // Place all players on the first tile
     placePlayers();
   }
 
+  private void oldOrNewPlayers() {
+    try {
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
+      List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
+
+      if (csvPlayers.isEmpty()) {
+
+        addPlayers();
+        return;
+      }
+
+
+      System.out.println("Velg spillere:");
+      System.out.println("0. Legg til nye spillere");
+
+
+      for (int i = 0; i < csvPlayers.size(); i++) {
+        Player player = csvPlayers.get(i);
+        System.out.println((i + 1) + ". " + player.getName() + " (" + player.getTokenType() + ")");
+      }
+
+      System.out.println("\nTast inn numrene til spillerne du vil spille med (f.eks. 1 3)");
+      String input = scanner.nextLine().trim();
+
+      if (input.equals("0")) {
+
+        addPlayers();
+        return;
+      }
+
+      boardGame.getPlayers().clear();
+
+      String[] selectedNumbers = input.split("\\s+");
+
+      for (String numStr : selectedNumbers) {
+        try {
+          int index = Integer.parseInt(numStr) - 1;
+
+          if (index >= 0 && index < csvPlayers.size()) {
+            Player selectedPlayer = csvPlayers.get(index);
+            boardGame.addPlayer(selectedPlayer);
+            System.out.println("Legger til " + selectedPlayer.getName());
+          } else {
+            System.out.println("Ugyldig valg: " + numStr);
+          }
+        } catch (NumberFormatException e) {
+          System.out.println("Ugyldig input: " + numStr);
+        }
+      }
+
+      if (boardGame.getPlayers().isEmpty()) {
+        addPlayers();
+      }
+
+    } catch (BoardGameException e) {
+      System.err.println("Feil ved håndtering av spillere: " + e.getMessage());
+      addPlayers();
+    }
+  }
+
+
+
+
+
+
   private void addPlayers() {
-    System.out.print("Enter number of players (2-4): ");
-    int numPlayers = getIntInput(2, 4);
+    System.out.print("Enter number of new players (1-4): ");
+    int numPlayers = getIntInput(1, 4);
 
     String[] tokenTypes = {"TopHat", "RaceCar", "Dog", "Ship"};
 
@@ -68,6 +135,8 @@ public class BoardGameApp {
       boardGame.addPlayer(player);
 
       System.out.println(name + " will use the " + tokenType + " token.");
+
+
     }
   }
 
@@ -107,6 +176,12 @@ public class BoardGameApp {
     System.out.println("\n=== Game Over ===");
     System.out.println("The winner is: " + boardGame.getWinner().getName() +
       " (" + boardGame.getWinner().getTokenType() + ")");
+
+    System.out.println("Ønsker du å lagre spillerene til filen? (y/n)");
+    String input = scanner.nextLine();
+    if (input.equalsIgnoreCase("y")){
+      boardGame.savePlayersToFile();
+    }
   }
 
   private int getIntInput(int min, int max) {
