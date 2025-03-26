@@ -12,6 +12,7 @@ public class BoardGame {
   private boolean gameFinished = false;
   private Player winner = null;
   private final int finalTileId = 90;
+  private BoardGame boardGame;
 
   private List<BoardGameObserver> observers = new ArrayList<>();
   public BoardGame() {
@@ -40,6 +41,8 @@ public class BoardGame {
     }
   }
 
+
+
   public void playOneRound() {
     if (gameFinished) {
       return;
@@ -66,6 +69,37 @@ public class BoardGame {
       } catch (Exception e) {
         System.out.println(e.getMessage());
       }
+    }
+  }
+
+  public void addPlayersFromFile() {
+    try {
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
+      List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
+
+      for (Player player : csvPlayers) {
+        boardGame.addPlayer(player);
+        System.out.println(player.getName() + " added to game, as: " + player.getTokenType());
+      }
+
+    } catch (BoardGameException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void viewPlayersFromFile() {
+    try {
+      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
+      List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
+      System.out.println("Players saved from previous games :");
+
+      for (Player player : csvPlayers) {
+        System.out.println(player.getName() + ", " + player.getTokenType());
+      }
+
+
+    } catch (BoardGameException e) {
+      e.printStackTrace();
     }
   }
 

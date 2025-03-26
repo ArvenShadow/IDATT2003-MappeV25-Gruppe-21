@@ -34,44 +34,15 @@ public class BoardGameApp {
     // Create dice
     boardGame.createDice();
 
-    viewPlayersFromFile();
+    boardGame.viewPlayersFromFile();
 
-    //addPlayersFromFile();
+    boardGame.addPlayersFromFile();
 
     // Add players
     addPlayers();
 
     // Place all players on the first tile
     placePlayers();
-  }
-
-  private void addPlayersFromFile() {
-    try {
-      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
-      List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
-
-      for (Player player : csvPlayers) {
-        boardGame.addPlayer(player);
-        System.out.println(player.getName() + " added to game, as: " + player.getTokenType());
-      }
-
-    } catch (BoardGameException e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void viewPlayersFromFile() {
-    try {
-      PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
-      List<Player> csvPlayers = csvHandler.readFromFile("Test_users.csv");
-
-      for (Player player : csvPlayers) {
-        System.out.println(player.getName() + ", " + player.getTokenType());
-      }
-
-    } catch (BoardGameException e) {
-      e.printStackTrace();
-    }
   }
 
   private void addPlayers() {
