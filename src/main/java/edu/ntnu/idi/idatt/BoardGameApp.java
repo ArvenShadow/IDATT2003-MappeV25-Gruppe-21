@@ -47,6 +47,8 @@ public class BoardGameApp {
     placePlayers();
   }
 
+
+  // Move this to scannerHandler eventually
   private void oldOrNewPlayers() {
     try {
       PlayerCsvHandler csvHandler = new PlayerCsvHandler(boardGame);
