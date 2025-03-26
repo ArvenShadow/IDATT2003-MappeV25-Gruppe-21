@@ -1,6 +1,12 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.action;
 
-public class LadderAction implements TileAction{
+import edu.ntnu.idi.idatt.event.GameEvent;
+import edu.ntnu.idi.idatt.event.ObservableGame;
+import edu.ntnu.idi.idatt.model.BoardGame;
+import edu.ntnu.idi.idatt.model.Player;
+import edu.ntnu.idi.idatt.model.Tile;
+
+public class LadderAction implements TileAction {
 
   private int destinationTileId;
   private boolean isLadder; //True for up, false for down

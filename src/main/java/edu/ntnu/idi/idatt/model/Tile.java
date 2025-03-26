@@ -1,6 +1,7 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.model;
 
 
+import edu.ntnu.idi.idatt.action.TileAction;
 
 public class Tile {
 

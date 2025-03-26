@@ -1,4 +1,8 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.factory;
+
+import edu.ntnu.idi.idatt.action.LadderAction;
+import edu.ntnu.idi.idatt.model.Board;
+import edu.ntnu.idi.idatt.model.Tile;
 
 public class BoardGameFactory {
   public static Board createBoard() {

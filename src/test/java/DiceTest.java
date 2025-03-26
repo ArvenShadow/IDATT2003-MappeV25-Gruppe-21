@@ -1,6 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.ntnu.idi.idatt.Dice;
+import edu.ntnu.idi.idatt.dice.Dice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

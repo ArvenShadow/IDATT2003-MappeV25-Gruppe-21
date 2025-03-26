@@ -1,4 +1,6 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.io;
+
+import edu.ntnu.idi.idatt.exception.BoardGameException;
 
 public interface FileHandler<T> {
 

@@ -1,6 +1,9 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.action;
 
-public class ChuteAction implements TileAction{
+import edu.ntnu.idi.idatt.model.Player;
+import edu.ntnu.idi.idatt.model.Tile;
+
+public class ChuteAction implements TileAction {
   private int destinationTileId;
 
   public ChuteAction(int destinationTileId){

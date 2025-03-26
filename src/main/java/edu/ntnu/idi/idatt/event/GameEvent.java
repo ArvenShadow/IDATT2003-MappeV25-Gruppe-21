@@ -1,4 +1,7 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.event;
+
+import edu.ntnu.idi.idatt.model.Player;
+import edu.ntnu.idi.idatt.model.Tile;
 
 public class GameEvent {
   private EventType type;

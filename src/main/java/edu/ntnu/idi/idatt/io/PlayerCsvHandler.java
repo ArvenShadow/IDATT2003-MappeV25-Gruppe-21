@@ -1,4 +1,8 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.io;
+
+import edu.ntnu.idi.idatt.exception.BoardGameException;
+import edu.ntnu.idi.idatt.model.BoardGame;
+import edu.ntnu.idi.idatt.model.Player;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

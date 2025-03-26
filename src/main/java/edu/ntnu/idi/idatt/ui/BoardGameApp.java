@@ -1,4 +1,8 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.ui;
+
+import edu.ntnu.idi.idatt.model.BoardGame;
+import edu.ntnu.idi.idatt.model.Player;
+import edu.ntnu.idi.idatt.model.Tile;
 
 import java.util.Scanner;
 

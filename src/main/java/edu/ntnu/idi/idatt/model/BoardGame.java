@@ -1,4 +1,11 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.model;
+
+import edu.ntnu.idi.idatt.action.ChuteAction;
+import edu.ntnu.idi.idatt.action.LadderAction;
+import edu.ntnu.idi.idatt.dice.Dice;
+import edu.ntnu.idi.idatt.event.BoardGameObserver;
+import edu.ntnu.idi.idatt.event.GameEvent;
+import edu.ntnu.idi.idatt.factory.BoardGameFactory;
 
 import java.util.ArrayList;
 import java.util.List;

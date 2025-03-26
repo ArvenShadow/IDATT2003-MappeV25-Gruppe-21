@@ -1,4 +1,5 @@
-package edu.ntnu.idi.idatt;
+package edu.ntnu.idi.idatt.dice;
+
 import java.util.ArrayList;
 
 public class Dice {
