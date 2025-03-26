@@ -47,6 +47,10 @@ public class LadderAction implements TileAction {
       throw new IllegalStateException("Destination tile " + destinationTileId + " not found");
     }
   }
+
+  public int getDestinationTileId() {
+    return destinationTileId;
+  }
 }
 
 

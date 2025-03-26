@@ -55,4 +55,8 @@ public class Tile {
     }
   }
 
+  public TileAction getTileAction(){
+    return tileAction;
+  }
+
 }
