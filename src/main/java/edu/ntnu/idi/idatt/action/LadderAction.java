@@ -8,7 +8,7 @@ import edu.ntnu.idi.idatt.model.Tile;
 
 public class LadderAction implements TileAction {
 
-  private int destinationTileId;
+  private final int destinationTileId;
   private boolean isLadder; //True for up, false for down
 
   public LadderAction(int destinationTileId){
