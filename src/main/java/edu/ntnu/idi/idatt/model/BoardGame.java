@@ -1,6 +1,5 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.action.ChuteAction;
 import edu.ntnu.idi.idatt.action.LadderAction;
 import edu.ntnu.idi.idatt.dice.Dice;
 import edu.ntnu.idi.idatt.event.BoardGameObserver;
@@ -42,7 +41,7 @@ public class BoardGame {
     }
     Tile chute = board.getTile(17);
     if (chute != null) {
-      chute.setTileAction(new ChuteAction(7));
+      chute.setTileAction(new LadderAction(7));
     }
   }
 
