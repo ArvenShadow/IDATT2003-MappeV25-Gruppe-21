@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.ui;
 
+import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.Tile;
@@ -9,6 +10,8 @@ import java.util.Scanner;
 public class BoardGameApp {
   private BoardGame boardGame;
   private Scanner scanner;
+  private static final String DEFAULT_PLAYERS_FILE = "src/Test_users.csv";
+  private static final String DEFAULT_BOARD_FILE = "src/main/resources/standard_board.json";
 
   public BoardGameApp() {
     this.boardGame = new BoardGame();
@@ -31,16 +34,53 @@ public class BoardGameApp {
   }
 
   private void initializeGame() {
-    // Create board (using factory)
-    boardGame.createBoard();
+    System.out.println("Game Setup Options:");
+    System.out.println("1. Use standard board");
+    System.out.println("2. Load board from file");
+    int boardChoice = getIntInput(1, 2);
 
-    // Create dice
+    if (boardChoice == 1) {
+      boardGame.createBoard();
+    } else {
+      try {
+        System.out.print("Enter board file path (or press Enter for default): ");
+        String boardFilePath = scanner.nextLine();
+        if (boardFilePath.isEmpty()) boardFilePath = DEFAULT_BOARD_FILE;
+
+        boardGame.loadBoardFromFile(boardFilePath);
+        System.out.println("Board loaded successfully!");
+      } catch (BoardGameException e) {
+        System.out.println("Error: " + e.getMessage() + ". Using default board.");
+        boardGame.createBoard();
+      }
+    }
+
     boardGame.createDice();
 
-    // Add players
-    addPlayers();
+    System.out.println("\nPlayer Setup Options:");
+    System.out.println("1. Add players manually");
+    System.out.println("2. Load players from file");
+    int playerChoice = getIntInput(1, 2);
 
-    // Place all players on the first tile
+    if (playerChoice == 1) {
+      addPlayers();
+    } else {
+      try {
+        System.out.print("Enter players file path (or press Enter for default): ");
+        String playersFilePath = scanner.nextLine();
+        if (playersFilePath.isEmpty()) playersFilePath = DEFAULT_PLAYERS_FILE;
+
+        boardGame.loadPlayersFromFile(playersFilePath);
+        System.out.println("Players loaded successfully:");
+        for (Player player : boardGame.getPlayers()) {
+          System.out.println("- " + player.getName() + " (" + player.getTokenType() + ")");
+        }
+      } catch (BoardGameException e) {
+        System.out.println("Error: " + e.getMessage() + ". Adding players manually.");
+        addPlayers();
+      }
+    }
+
     placePlayers();
   }
 
