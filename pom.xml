@@ -188,7 +188,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        edu.ntnu.idi.idatt.gui.GameFrame
+                                        edu.ntnu.idi.idatt.ui.BoardGameApp
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -208,7 +208,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>edu.ntnu.idi.idatt.gui.GameFrame</mainClass>
+                            <mainClass>edu.ntnu.idi.idatt.ui.BoardGameApp</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
