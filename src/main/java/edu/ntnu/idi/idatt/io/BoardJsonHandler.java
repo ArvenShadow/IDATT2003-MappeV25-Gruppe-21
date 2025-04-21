@@ -16,7 +16,12 @@ public class BoardJsonHandler implements FileHandler<Board> {
   @Override
   public Board readFromFile(String filename) throws BoardGameException {
     try (Reader reader = new FileReader(filename)) {
-      JsonObject boardJson = new JsonParser().parse(reader).getAsJsonObject();
+      JsonObject boardJson = JsonParser.parseReader(reader).getAsJsonObject();
+
+      // Check if required properties exist
+      if (!boardJson.has("rows") || !boardJson.has("columns") || !boardJson.has("tiles")) {
+        throw new BoardGameException("Invalid board JSON format: missing required properties");
+      }
 
       int rows = boardJson.get("rows").getAsInt();
       int columns = boardJson.get("columns").getAsInt();
@@ -26,47 +31,61 @@ public class BoardJsonHandler implements FileHandler<Board> {
       Map<Integer, Tile> tilesMap = new HashMap<>();
       JsonArray tilesArray = boardJson.getAsJsonArray("tiles");
 
+      // First pass: create all tiles
       for (JsonElement tileElement : tilesArray) {
         JsonObject tileJson = tileElement.getAsJsonObject();
+
+        // Validate required tile properties
+        if (!tileJson.has("id") || !tileJson.has("row") || !tileJson.has("col")) {
+          continue; // Skip invalid tiles
+        }
+
         int id = tileJson.get("id").getAsInt();
-
         int row = tileJson.get("row").getAsInt();
-        int column = tileJson.get("column").getAsInt();
+        int col = tileJson.get("col").getAsInt();
 
-        Tile tile = new Tile(id, row, column);
+        Tile tile = new Tile(id, row, col);
         tilesMap.put(id, tile);
         board.addTile(tile);
       }
 
+      // Second pass: link tiles and add actions
       for (JsonElement tileElement : tilesArray) {
         JsonObject tileJson = tileElement.getAsJsonObject();
         int id = tileJson.get("id").getAsInt();
         Tile tile = tilesMap.get(id);
 
+        if (tile == null) continue;
+
+        // Link next tile if specified
         if (tileJson.has("nextTile")) {
           int nextTileId = tileJson.get("nextTile").getAsInt();
           Tile nextTile = tilesMap.get(nextTileId);
           if (nextTile != null) {
             tile.setNextTile(nextTile);
-          } else {
-            throw new BoardGameException("nextTile " + nextTileId + " not found");
           }
         }
+
+        // Add action if specified
         if (tileJson.has("action")) {
           JsonObject actionJson = tileJson.getAsJsonObject("action");
-          String type = actionJson.get("type").getAsString();
-          int destTileId = actionJson.get("destinationTileId").getAsInt();
 
-          if ("LadderAction".equals(type)) {
-            tile.setTileAction(new LadderAction(destTileId));
+          if (actionJson.has("type") && actionJson.has("destinationTileId")) {
+            String type = actionJson.get("type").getAsString();
+            int destTileId = actionJson.get("destinationTileId").getAsInt();
+
+            if ("LadderAction".equals(type)) {
+              tile.setTileAction(new LadderAction(destTileId));
+            }
           }
         }
       }
+
       return board;
     } catch (IOException e) {
-      throw new BoardGameException("Failed to load board from file '" + filename + "': File not found");
+      throw new BoardGameException("Failed to load board from file: " + filename, e);
     } catch (JsonSyntaxException e) {
-      throw new BoardGameException("Invalid JSON format in board file " + filename, e);
+      throw new BoardGameException("Invalid JSON format in board file: " + filename, e);
     } catch (Exception e) {
       throw new BoardGameException("Unexpected error reading board " + filename + e.getMessage(), e);
     }
