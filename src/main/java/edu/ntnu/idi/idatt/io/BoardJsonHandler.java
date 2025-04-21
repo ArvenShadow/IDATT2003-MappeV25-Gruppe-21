@@ -64,7 +64,7 @@ public class BoardJsonHandler implements FileHandler<Board> {
       }
       return board;
     } catch (IOException e) {
-      throw new BoardGameException("Error reading board file " + filename, e);
+      throw new BoardGameException("Failed to load board from file '" + filename + "': File not found");
     } catch (JsonSyntaxException e) {
       throw new BoardGameException("Invalid JSON format in board file " + filename, e);
     } catch (Exception e) {
