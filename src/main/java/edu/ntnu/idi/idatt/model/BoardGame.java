@@ -1,12 +1,12 @@
 package edu.ntnu.idi.idatt.model;
 
 import edu.ntnu.idi.idatt.action.LadderAction;
-import edu.ntnu.idi.idatt.dice.Dice;
 import edu.ntnu.idi.idatt.event.BoardGameObserver;
 import edu.ntnu.idi.idatt.event.GameEvent;
 import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.factory.BoardGameFactory;
 import edu.ntnu.idi.idatt.io.BoardJsonHandler;
+import edu.ntnu.idi.idatt.io.PlayerCsvHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,5 +128,21 @@ public class BoardGame {
   public void loadBoardFromFile(String filename) throws BoardGameException {
     BoardJsonHandler handler = new BoardJsonHandler();
     this.board = handler.readFromFile(filename);
+  }
+
+  public void loadPlayersFromFile(String filename) throws BoardGameException {
+    PlayerCsvHandler handler = new PlayerCsvHandler(this);
+    List<Player> loadedPlayers = handler.readFromFile(filename);
+
+    // Clear existing players and add loaded ones
+    players.clear();
+    for (Player player : loadedPlayers) {
+      addPlayer(player);
+    }
+  }
+
+  public void savePlayersToFile(String filename) throws BoardGameException {
+    PlayerCsvHandler handler = new PlayerCsvHandler(this);
+    handler.writeToFile(players, filename);
   }
 }
