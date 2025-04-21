@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt.dice;
+package edu.ntnu.idi.idatt.model;
 import java.util.Random;
 
 public class Die {
