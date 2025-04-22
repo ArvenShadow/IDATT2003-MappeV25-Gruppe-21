@@ -268,7 +268,7 @@ public class HangmanView {
             mainLayout.setBackground(new Background(backgroundImage));
         } catch (Exception e) {
             System.err.println("Kunne ikke laste bakgrunnsbilde: " + e.getMessage());
-            // Fall tilbake til en enkel bakgrunnsfarge ved feil
+
             mainLayout.setBackground(new Background(new BackgroundFill(
                     Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         }
