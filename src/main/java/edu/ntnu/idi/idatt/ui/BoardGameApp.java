@@ -88,20 +88,27 @@ public class BoardGameApp {
     System.out.print("Enter number of players (2-4): ");
     int numPlayers = getIntInput(2, 4);
 
-    String[] tokenTypes = {"TopHat", "RaceCar", "Dog", "Ship"};
-
     for (int i = 0; i < numPlayers; i++) {
       System.out.print("Enter name for Player " + (i+1) + ": ");
       String name = scanner.nextLine();
 
       System.out.println("Choose token type:");
-      for (int j = 0; j < tokenTypes.length; j++) {
-        System.out.println((j+1) + ". " + tokenTypes[j]);
-      }
-      System.out.print("Enter choice (1-" + tokenTypes.length + "): ");
+      System.out.println("1. TopHat");
+      System.out.println("2. RaceCar");
+      System.out.println("3. Shoe");
+      System.out.println("4. Thimble");
+      System.out.print("Enter choice (1-4): ");
 
-      int tokenChoice = getIntInput(1, tokenTypes.length);
-      String tokenType = tokenTypes[tokenChoice-1];
+      int tokenChoice = getIntInput(1, 4);
+      String tokenType;
+
+      switch (tokenChoice) {
+        case 1: tokenType = "TopHat"; break;
+        case 2: tokenType = "RaceCar"; break;
+        case 3: tokenType = "Shoe"; break;
+        case 4: tokenType = "Thimble"; break;
+        default: tokenType = "TopHat";
+      }
 
       Player player = new Player(name, boardGame, tokenType);
       boardGame.addPlayer(player);
