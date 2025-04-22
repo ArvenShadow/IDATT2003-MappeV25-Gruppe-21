@@ -1,4 +1,7 @@
-package edu.ntnu.idi.idatt.view.mainMenu;
+package edu.ntnu.idi.idatt.controller;
+
+import edu.ntnu.idi.idatt.view.Hangman.HangmanView;
+import javafx.stage.Stage;
 
 public class MenuController {
 
@@ -20,6 +23,9 @@ public class MenuController {
 
     public void startHangman(){
         System.out.println("Starting hangman...");
+        Stage hangmanStage = new Stage();
+        HangmanView hangmanView = new HangmanView(hangmanStage);
+        hangmanView.show();
     }
 
     public void exit(){

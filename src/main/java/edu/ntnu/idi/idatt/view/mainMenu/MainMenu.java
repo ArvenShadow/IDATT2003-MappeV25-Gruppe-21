@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt.view.mainMenu;
 
+import edu.ntnu.idi.idatt.controller.MenuController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,8 +31,8 @@ public class MainMenu {
 
     public void show() {
 
-        BorderPane mainLayout = new BorderPane();
-        mainLayout.setStyle("-fx-background-image: url('/images/texture.jpg');");
+        BorderPane bordePane = new BorderPane();
+        bordePane.setStyle("-fx-background-image: url('/images/texture.jpg');");
 
         GridPane gameGrid = new GridPane();
         gameGrid.setAlignment(Pos.CENTER);
@@ -51,7 +52,7 @@ public class MainMenu {
         gameGrid.add(pongBox, 0, 1);
         gameGrid.add(ticTacToeBox, 1, 1);
 
-        mainLayout.setCenter(gameGrid);
+        bordePane.setCenter(gameGrid);
 
 
         Button exitButton = new Button("Avslutt");
@@ -63,9 +64,9 @@ public class MainMenu {
         VBox bottomBox = new VBox(20, exitButton);
         bottomBox.setAlignment(Pos.CENTER);
         bottomBox.setPadding(new Insets(20));
-        mainLayout.setBottom(bottomBox);
+        bordePane.setBottom(bottomBox);
 
-        Scene scene = new Scene(mainLayout, 800, 600);
+        Scene scene = new Scene(bordePane, 800, 600);
         stage.setScene(scene);
         stage.setTitle("Spillmeny");
         stage.setFullScreenExitHint(" ");

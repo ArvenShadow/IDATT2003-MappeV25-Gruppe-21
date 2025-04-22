@@ -1,10 +1,8 @@
 package edu.ntnu.idi.idatt.ui;
 
 import edu.ntnu.idi.idatt.model.BoardGame;
-import edu.ntnu.idi.idatt.model.Player;
-import edu.ntnu.idi.idatt.model.Tile;
 import edu.ntnu.idi.idatt.view.mainMenu.MainMenu;
-import edu.ntnu.idi.idatt.view.mainMenu.MenuController;
+import edu.ntnu.idi.idatt.controller.MenuController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
