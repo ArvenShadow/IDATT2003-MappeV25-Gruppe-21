@@ -31,7 +31,7 @@ public class MainMenu {
     public void show() {
 
         BorderPane mainLayout = new BorderPane();
-        mainLayout.setStyle("-fx-background-color: #764d9c;");
+        mainLayout.setStyle("-fx-background-image: url('/images/texture.jpg');");
 
         GridPane gameGrid = new GridPane();
         gameGrid.setAlignment(Pos.CENTER);
