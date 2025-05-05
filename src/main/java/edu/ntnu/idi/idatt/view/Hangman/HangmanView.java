@@ -198,9 +198,9 @@ public class HangmanView {
                 if (btn.getText().equalsIgnoreCase(String.valueOf(letter))) {
                     btn.setDisable(true);
                     if (correct) {
-                        btn.setStyle("-fx-background-color: #90EE90;"); // Riktig (lysegrønn)
+                        btn.setStyle("-fx-background-color: #90EE90;");
                     } else {
-                        btn.setStyle("-fx-background-color: #FFB6C1;"); // Feil (lysrød)
+                        btn.setStyle("-fx-background-color: #FFB6C1;");
                     }
                     break;
                 }
@@ -215,13 +215,12 @@ public class HangmanView {
         if (hint != null) {
             updateUI();
 
-
             for (var node : letterButtons.getChildren()) {
                 if (node instanceof Button) {
                     Button btn = (Button) node;
                     if (btn.getText().equalsIgnoreCase(String.valueOf(hint))) {
                         btn.setDisable(true);
-                        btn.setStyle("-fx-background-color: #FFD700;"); // Gul for hint
+                        btn.setStyle("-fx-background-color: #FFD700;");
                         break;
                     }
                 }

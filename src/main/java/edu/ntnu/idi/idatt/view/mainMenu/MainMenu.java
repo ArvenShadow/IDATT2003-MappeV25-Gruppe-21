@@ -80,7 +80,7 @@ public class MainMenu {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         titleLabel.setTextFill(Color.WHITE);
 
-
+        // Knapp med bilde
         Button gameButton = new Button();
         gameButton.setPrefWidth(BUTTON_SIZE);
         gameButton.setPrefHeight(BUTTON_SIZE);

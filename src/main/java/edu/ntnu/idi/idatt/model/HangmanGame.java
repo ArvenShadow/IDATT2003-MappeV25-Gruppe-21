@@ -9,7 +9,7 @@ public class HangmanGame {
 
     public static final String[] wordList = {"apple", "banana", "carrot", "duck", "elephant", "fox", "giraffe", "horse", "jellyfish", "kiwi",
             "lion", "monkey", "octopus", "panda", "penguin", "rabbit", "shark", "snake", "spider", "tiger", "turtle", "whale", "zebra",
-            "computer", "competition", "soulmate", "java", "python"};
+            "computer", "competition", "soulmate", "java", "python", "encapsulation", "polymorphism", "helloworld"};
 
     private String wordToGuess;
     private char[] currentGuess;
