@@ -3,6 +3,7 @@ package edu.ntnu.idi.idatt.model;
 import edu.ntnu.idi.idatt.action.LadderAction;
 import edu.ntnu.idi.idatt.event.BoardGameObserver;
 import edu.ntnu.idi.idatt.event.GameEvent;
+import edu.ntnu.idi.idatt.event.ObservableGame;
 import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.factory.BoardGameFactory;
 import edu.ntnu.idi.idatt.io.BoardJsonHandler;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BoardGame {
+public class BoardGame implements ObservableGame {
   private Board board;
   private Player currentPlayer;
   private final List<Player> players = new ArrayList<>();
