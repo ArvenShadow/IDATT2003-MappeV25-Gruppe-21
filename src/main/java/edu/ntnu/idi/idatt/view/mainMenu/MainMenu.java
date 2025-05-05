@@ -31,8 +31,8 @@ public class MainMenu {
 
     public void show() {
 
-        BorderPane bordePane = new BorderPane();
-        bordePane.setStyle("-fx-background-image: url('/images/texture.jpg');");
+        BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-background-image: url('/images/texture.jpg');");
 
         GridPane gameGrid = new GridPane();
         gameGrid.setAlignment(Pos.CENTER);
@@ -52,7 +52,7 @@ public class MainMenu {
         gameGrid.add(pongBox, 0, 1);
         gameGrid.add(ticTacToeBox, 1, 1);
 
-        bordePane.setCenter(gameGrid);
+        borderPane.setCenter(gameGrid);
 
 
         Button exitButton = new Button("Avslutt");
@@ -64,9 +64,9 @@ public class MainMenu {
         VBox bottomBox = new VBox(20, exitButton);
         bottomBox.setAlignment(Pos.CENTER);
         bottomBox.setPadding(new Insets(20));
-        bordePane.setBottom(bottomBox);
+        borderPane.setBottom(bottomBox);
 
-        Scene scene = new Scene(bordePane, 800, 600);
+        Scene scene = new Scene(borderPane, 800, 600);
         stage.setScene(scene);
         stage.setTitle("Spillmeny");
         stage.setFullScreenExitHint(" ");
@@ -80,7 +80,7 @@ public class MainMenu {
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         titleLabel.setTextFill(Color.WHITE);
 
-        // Knapp med bilde
+
         Button gameButton = new Button();
         gameButton.setPrefWidth(BUTTON_SIZE);
         gameButton.setPrefHeight(BUTTON_SIZE);
