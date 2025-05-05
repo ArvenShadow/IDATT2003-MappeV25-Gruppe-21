@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Label;
 
+
 public class GameFrame extends Application{
 
   @Override
@@ -17,3 +18,5 @@ public class GameFrame extends Application{
         primaryStage.show();
     }
 }
+
+

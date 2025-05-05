@@ -15,6 +15,7 @@ public class LadderAction implements TileAction {
     this.destinationTileId = destinationTileId;
     this.isLadder = true;
   }
+  //comment
 
   @Override
   public void perform (Player player) {
