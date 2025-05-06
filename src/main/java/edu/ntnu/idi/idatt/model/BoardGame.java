@@ -46,34 +46,6 @@ public class BoardGame implements ObservableGame {
     }
   }
 
-  public void playOneRound() {
-    if (gameFinished) {
-      return;
-    }
-
-    for (Player player : players) {
-      if (gameFinished) {
-        break;
-      }
-
-      currentPlayer = player;
-      int roll = dice.Roll();
-      try {
-        Tile oldTile = player.getCurrentTile();
-        player.move(roll);
-        if (player.hasWon(finalTileId)) {
-          gameFinished = true;
-          winner = player;
-          System.out.println(player.getName() + " has won! Everyone else sucks!");
-
-          notifyObservers(new GameEvent(GameEvent.EventType.GAME_OVER, player, oldTile, player.getCurrentTile()));
-        }
-
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
-    }
-  }
 
   public boolean isFinished() {
     return gameFinished;
