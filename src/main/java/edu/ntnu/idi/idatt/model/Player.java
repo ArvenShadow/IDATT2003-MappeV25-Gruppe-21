@@ -5,6 +5,7 @@ public class Player {
   private Tile currentTile;
   private BoardGame game;
   private String tokenType; // TopHat, RaceCar etc..
+  private boolean skipsNextTurn = false;
 
   public Player(String name, BoardGame game, String tokenType) {
     this.name = name;
@@ -55,6 +56,13 @@ public class Player {
 
   public String getTokenType() {
     return tokenType;
+  }
+
+  public void setSkipsNextTurn(boolean skipsNextTurn) {
+    this.skipsNextTurn = skipsNextTurn;
+  }
+  public boolean getSkipsNextTurn() {
+    return skipsNextTurn;
   }
 
 }
