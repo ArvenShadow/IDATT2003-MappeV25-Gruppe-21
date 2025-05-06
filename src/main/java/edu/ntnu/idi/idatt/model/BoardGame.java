@@ -46,17 +46,8 @@ public class BoardGame implements ObservableGame {
     }
   }
 
-
-  public boolean isFinished() {
-    return gameFinished;
-  }
-
-  public Player getWinner() {
-    return winner;
-  }
-
-  public void createDice() {
-    this.dice = new Dice(1);
+  public void createDice(int numberOfDice) {
+    this.dice = new Dice(numberOfDice);
   }
 
   public Board getBoard() {
@@ -91,6 +82,10 @@ public class BoardGame implements ObservableGame {
 
   public void createBoard() {
     this.board = BoardGameFactory.createBoard();
+  }
+
+  public void createBoardFromFile() {
+    this.board = BoardGameFactory.createFromFile();
   }
 
   public void saveBoardToFile(String filename) throws BoardGameException {
