@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.factory;
 
 import edu.ntnu.idi.idatt.action.LadderAction;
+import edu.ntnu.idi.idatt.io.BoardJsonHandler;
 import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.Tile;
 
@@ -29,6 +30,15 @@ public class BoardGameFactory {
     addConnection(board, 99, 78);
 
     return board;
+  }
+
+  public static Board createFromFile() {
+    BoardJsonHandler handler = new BoardJsonHandler();
+    try {
+      return handler.readFromFile("standard_board.json");
+    } catch (Exception e) {
+      return createBoard();
+    }
   }
 
   private static void addConnection(Board board, int fromTileId, int toTileId) {
