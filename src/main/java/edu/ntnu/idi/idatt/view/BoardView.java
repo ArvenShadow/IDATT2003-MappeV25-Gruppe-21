@@ -188,7 +188,7 @@ public class BoardView extends Pane {
     playerColors.clear();
   }
 
-  public Map<Integer, Color> getPlayerColors() {
-    return playerColors;
+  public Color getPlayerColor(int playerIndex) {
+    return playerColors.getOrDefault(playerIndex, Color.GRAY);
   }
 }
