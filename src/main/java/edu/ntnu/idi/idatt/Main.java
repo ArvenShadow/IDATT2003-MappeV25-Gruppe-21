@@ -13,7 +13,7 @@ public class Main extends Application {
   public void start(Stage primaryStage) {
     // Create the model
     BoardGame game = new BoardGame();
-    game.createBoardFromFile();
+    game.createBoard();
     game.createDice(1);
 
 

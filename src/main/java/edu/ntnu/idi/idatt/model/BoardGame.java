@@ -84,9 +84,7 @@ public class BoardGame implements ObservableGame {
     this.board = BoardGameFactory.createBoard();
   }
 
-  public void createBoardFromFile() {
-    this.board = BoardGameFactory.createFromFile();
-  }
+
 
   public void saveBoardToFile(String filename) throws BoardGameException {
     BoardJsonHandler handler = new BoardJsonHandler();
