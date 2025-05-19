@@ -1,0 +1,5 @@
+.main-menu {
+    -fx-background-image: url("images/wood_texture.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
