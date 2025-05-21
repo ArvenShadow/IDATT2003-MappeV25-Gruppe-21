@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.view.MainMenu;
+import edu.ntnu.idi.idatt.view.MainMenuView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,7 +11,7 @@ public class BoardGameApp extends Application {
         primaryStage.setTitle("Chutes and Ladders");
 
 
-        MainMenu mainMenu = new MainMenu();
+        MainMenuView mainMenu = new MainMenuView();
         primaryStage.setScene(mainMenu.getStyledScene());
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitHint("");

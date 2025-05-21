@@ -1,17 +1,13 @@
 package edu.ntnu.idi.idatt.view;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-
-import java.util.Objects;
 
 public class MainMenuView {
   private BorderPane root;
@@ -19,72 +15,64 @@ public class MainMenuView {
   private Runnable loadGameHandler;
   private Runnable exitHandler;
 
-  public MainMenuView() {
-    createUI();
-  }
+  public BorderPane getMainMenuLayout() {
 
-  private void createUI() {
-    root = new BorderPane();
-    root.setPadding(new Insets(20));
-    root.getStyleClass().add("main-menu");
-
-    // Title
-    Label titleLabel = new Label("Board Game");
-    titleLabel.setFont(Font.font("Arial", 36));
-    titleLabel.getStyleClass().add("title-label");
-
-    // Menu buttons
-    Button newGameButton = new Button("New Game");
-    Button loadGameButton = new Button("Load Game");
+    Button smallBoardButton = new Button("Small board (5x5)");
+    Button normalBoardButton = new Button("Normal board (8x8)");
+    Button largeBoardButton = new Button("Large board (10x10)");
     Button exitButton = new Button("Exit");
 
-    // Style buttons
-    for (Button button : new Button[]{newGameButton, loadGameButton, exitButton}) {
-      button.setPrefWidth(200);
-      button.setPrefHeight(40);
-      button.getStyleClass().add("menu-button");
-    }
+    smallBoardButton.getStyleClass().add("button");
+    normalBoardButton.getStyleClass().add("button");
+    largeBoardButton.getStyleClass().add("button");
+    exitButton.getStyleClass().add("exit-button");
 
-    // Add event handlers
-    newGameButton.setOnAction(e -> {
-      if (newGameHandler != null) {
-        newGameHandler.run();
-      }
+    HBox bottomRow = new HBox(20);
+    bottomRow.getChildren().addAll(smallBoardButton, largeBoardButton);
+    bottomRow.setAlignment(Pos.CENTER);
+
+    VBox centerLayout = new VBox(15);
+    centerLayout.getChildren().addAll(normalBoardButton, bottomRow);
+    centerLayout.setAlignment(Pos.CENTER);
+
+    centerLayout.setPadding(new Insets(20, 20, 50, 20));
+
+
+    BorderPane layout = new BorderPane();
+    layout.setCenter(centerLayout);
+    layout.setBottom(exitButton);
+    BorderPane.setAlignment(exitButton, Pos.BOTTOM_LEFT);
+    BorderPane.setMargin(exitButton, new Insets(10));
+
+
+    smallBoardButton.setOnAction(e -> {
+      System.out.println("Small board selected");
     });
-
-    loadGameButton.setOnAction(e -> {
-      if (loadGameHandler != null) {
-        loadGameHandler.run();
-      }
+    normalBoardButton.setOnAction(e -> {
+      System.out.println("Normal board selected");
     });
-
+    largeBoardButton.setOnAction(e -> {
+      System.out.println("Large board selected");
+    });
     exitButton.setOnAction(e -> {
-      if (exitHandler != null) {
-        exitHandler.run();
-      }
+      System.out.println("Exiting program...");
+      System.exit(0);
     });
 
-    // Layout
-    VBox menuBox = new VBox(20);
-    menuBox.setAlignment(Pos.CENTER);
-    menuBox.getChildren().addAll(titleLabel, newGameButton, loadGameButton, exitButton);
+    return layout;
+  }
 
-    // Try to load a background image if available
-    try {
-      Image bgImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/background.jpg")));
-      ImageView bgView = new ImageView(bgImage);
-      bgView.setPreserveRatio(true);
-      bgView.fitWidthProperty().bind(root.widthProperty());
-      bgView.fitHeightProperty().bind(root.heightProperty());
-      bgView.setOpacity(0.3);
-      root.setBackground(null);
-      root.getChildren().add(bgView);
-    } catch (Exception e) {
-      // Fallback if image can't be loaded
-      root.setStyle("-fx-background-color: linear-gradient(to bottom, #f2f2f2, #d9d9d9);");
-    }
+  public Scene getStyledScene() {
+    BorderPane layout = getMainMenuLayout();
 
-    root.setCenter(menuBox);
+
+    layout.getStyleClass().add("main-menu");
+
+    Scene scene = new Scene(layout, 800, 600);
+    String css = getClass().getResource("/style.css").toExternalForm();
+    scene.getStylesheets().add(css);
+
+    return scene;
   }
 
   public Parent getRoot() {
@@ -102,4 +90,6 @@ public class MainMenuView {
   public void setExitHandler(Runnable handler) {
     this.exitHandler = handler;
   }
+
+
 }
