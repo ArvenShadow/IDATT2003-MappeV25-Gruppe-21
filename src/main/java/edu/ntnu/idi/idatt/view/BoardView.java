@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt.view;
 
 import edu.ntnu.idi.idatt.action.LadderAction;
+import edu.ntnu.idi.idatt.action.SkipTurnAction;
 import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.Tile;
@@ -68,7 +69,7 @@ public class BoardView extends Pane {
           if (tile.getTileAction() instanceof LadderAction) {
             LadderAction ladderAction = (LadderAction) tile.getTileAction();
             int destinationId = ladderAction.getDestinationTileId();
-
+            System.out.println("ladderaction from " + tileId + " to " + destinationId);
             if (destinationId > tileId) {
               tileRect.setFill(Color.LIGHTGREEN);
             } else {
@@ -86,6 +87,10 @@ public class BoardView extends Pane {
 
         tileViews.put(tileId, tileRect);
         this.getChildren().addAll(tileRect, tileText);
+
+        if (tile.getTileAction() != null && tile.getTileAction() instanceof SkipTurnAction) {
+          createSkipTurnIndicator(x, y);
+        }
       }
     }
 
@@ -217,6 +222,37 @@ public class BoardView extends Pane {
       // If all else fails, return null and handle gracefully
       return null;
     }
+  }
+
+  private void createSkipTurnIndicator(double x, double y) {
+
+    Circle blockCircle = new Circle(x + TILE_SIZE / 2, y + TILE_SIZE / 2, TILE_SIZE / 3);
+    blockCircle.setFill(Color.RED);
+    blockCircle.setOpacity(0.3);
+    blockCircle.setStroke(Color.DARKRED);
+    blockCircle.setStrokeWidth(2);
+
+    double centerX = x + TILE_SIZE / 2;
+    double centerY = y + TILE_SIZE / 2;
+    double lineOffset = TILE_SIZE / 6;
+
+    Line line1 = new Line(centerX - lineOffset, centerY - lineOffset,
+      centerX + lineOffset, centerY + lineOffset
+    );
+    Line line2 = new Line(centerX - lineOffset, centerY + lineOffset,
+      centerX + lineOffset, centerY - lineOffset
+    );
+
+    line1.setStroke(Color.WHITE);
+    line1.setStrokeWidth(3);
+    line2.setStroke(Color.WHITE);
+    line2.setStrokeWidth(3);
+
+    this.getChildren().addAll(blockCircle, line1, line2);
+    blockCircle.toFront();
+    line1.toFront();
+    line2.toFront();
+
   }
 
   public void clearPlayerTokens() {
