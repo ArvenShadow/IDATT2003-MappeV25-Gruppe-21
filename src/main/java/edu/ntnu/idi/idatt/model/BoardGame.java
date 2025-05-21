@@ -1,11 +1,11 @@
 package edu.ntnu.idi.idatt.model;
 
+import edu.ntnu.idi.idatt.action.TileAction;
 import edu.ntnu.idi.idatt.event.GameEvent;
 import edu.ntnu.idi.idatt.event.GameEventType;
 import edu.ntnu.idi.idatt.event.GameObserver;
 import edu.ntnu.idi.idatt.event.ObservableGame;
 import edu.ntnu.idi.idatt.exception.BoardGameException;
-import edu.ntnu.idi.idatt.action.TileAction;
 import edu.ntnu.idi.idatt.io.BoardJsonHandler;
 
 import java.util.ArrayList;
@@ -146,18 +146,6 @@ public class BoardGame implements ObservableGame {
     }
   }
 
-  // Add placeholder implementations for save/load game
-  public void saveGame(String filename) throws BoardGameException {
-    // Basic implementation that could be expanded later
-    // For now, just simulate saving board and player states
-    try {
-      BoardJsonHandler boardHandler = new BoardJsonHandler();
-      boardHandler.writeToFile(board, filename);
-      // In a full implementation, we'd also save player state
-    } catch (Exception e) {
-      throw new BoardGameException("Failed to save game: " + e.getMessage(), e);
-    }
-  }
 
   public void loadGame(String filename) throws BoardGameException {
     try {
