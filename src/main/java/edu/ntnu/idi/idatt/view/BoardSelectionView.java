@@ -1,5 +1,7 @@
 package edu.ntnu.idi.idatt.view;
 
+import edu.ntnu.idi.idatt.io.BoardJsonHandler;
+import edu.ntnu.idi.idatt.model.Board;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,16 +10,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLOutput;
+
 public class BoardSelectionView {
     public BorderPane getMainMenuLayout() {
 
         Button smallBoardButton = new Button("Small board (5x5)");
-        Button normalBoardButton = new Button("Normal board (8x8)");
+        Button standardBoardButton = new Button("Normal board (8x8)");
         Button largeBoardButton = new Button("Large board (10x10)");
         Button exitButton = new Button("Exit");
 
         smallBoardButton.getStyleClass().add("button");
-        normalBoardButton.getStyleClass().add("button");
+        standardBoardButton.getStyleClass().add("button");
         largeBoardButton.getStyleClass().add("button");
         exitButton.getStyleClass().add("exit-button");
 
@@ -26,7 +30,7 @@ public class BoardSelectionView {
         bottomRow.setAlignment(Pos.CENTER);
 
         VBox centerLayout = new VBox(15);
-        centerLayout.getChildren().addAll(normalBoardButton, bottomRow);
+        centerLayout.getChildren().addAll(standardBoardButton, bottomRow);
         centerLayout.setAlignment(Pos.CENTER);
 
         centerLayout.setPadding(new Insets(20, 20, 50, 20));
@@ -42,11 +46,19 @@ public class BoardSelectionView {
         smallBoardButton.setOnAction(e -> {
             System.out.println("Small board selected");
         });
-        normalBoardButton.setOnAction(e -> {
+        smallBoardButton.setOnAction(e -> {selectBoard("src/main/resources/small_board.json");
+        });
+
+        standardBoardButton.setOnAction(e -> {
             System.out.println("Normal board selected");
         });
+        standardBoardButton.setOnAction(e -> {selectBoard("src/main/resources/standard_board.json");
+        });
+
         largeBoardButton.setOnAction(e -> {
             System.out.println("Large board selected");
+        });
+        largeBoardButton.setOnAction(e -> {selectBoard("src/main/resources/large_board.json");
         });
         exitButton.setOnAction(e -> {
             System.out.println("Exiting program...");
@@ -70,6 +82,19 @@ public class BoardSelectionView {
         }
 
         return scene;
+    }
+
+    private void selectBoard(String filepath){
+        System.out.println("Loading board from: " + filepath);
+
+        try{
+            BoardJsonHandler handler = new BoardJsonHandler();
+            Board board = handler.readFromFile(filepath);
+            System.out.println("Board loaded successfully! with rows: " + board.getNumRows()
+                    + " and columns: " + board.getNumCols());
+        } catch (Exception e){
+            System.err.println("Failed to load board: " + e.getMessage());
+        }
     }
 }
 
