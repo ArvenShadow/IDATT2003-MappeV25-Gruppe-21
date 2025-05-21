@@ -1,4 +1,9 @@
 /* src/main/resources/styles/game.css */
+.main-menu {
+    -fx-background-image: url("/Images/hd_background.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
 
 .root {
     -fx-font-family: 'Arial';
