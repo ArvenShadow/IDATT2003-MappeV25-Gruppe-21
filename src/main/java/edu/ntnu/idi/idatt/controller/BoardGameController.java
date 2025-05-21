@@ -1,81 +1,168 @@
 package edu.ntnu.idi.idatt.controller;
 
-import edu.ntnu.idi.idatt.event.BoardGameObserver;
+import edu.ntnu.idi.idatt.event.GameEvent;
+import edu.ntnu.idi.idatt.event.GameEventType;
+import edu.ntnu.idi.idatt.event.GameObserver;
+import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.model.BoardGame;
-import edu.ntnu.idi.idatt.view.BoardView;
-import edu.ntnu.idi.idatt.view.DiceView;
-import edu.ntnu.idi.idatt.view.PlayerInfoView;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import edu.ntnu.idi.idatt.model.Player;
+import edu.ntnu.idi.idatt.view.BoardGameView;
 
-public class BoardGameController {  // implements BoardGameObserver
-  private final BoardGame game;
-  private final Stage primaryStage;
-  private final BorderPane rootPane;
+import java.util.List;
 
-  private BoardView boardView;
-  private PlayerInfoView playerInfoView;
-  private Text statusText;
-  private Button rollButton;
-  private Button newGameButton;
-  private DiceView diceView;
+public class BoardGameController implements GameObserver {
+  private BoardGame model;
+  private BoardGameView view;
 
-  private boolean animationInProgress = false;
+  public BoardGameController(BoardGame model, BoardGameView view) {
+    this.model = model;
+    this.view = view;
 
+    // Register as observer
+    model.addObserver(this);
 
-  public BoardGameController(BoardGame game, BorderPane rootPane, Stage primaryStage) {
-    this.game = game;
-    this.primaryStage = primaryStage;
-    this.rootPane = rootPane;
+    // Set up view event handlers
+    view.setRollDiceHandler(this::handleRollDice);
+    view.setNewGameHandler(this::handleNewGame);
+    view.setSaveGameHandler(this::handleSaveGame);
+    view.setLoadGameHandler(this::handleLoadGame);
 
-    //game.addObserver(this);
+    // Initialize view with current game state
+    view.renderBoard(model.getBoard());
+    view.updatePlayersList(model.getPlayers());
 
-    setupUI();
+    // Highlight current player
+    if (!model.getPlayers().isEmpty()) {
+      view.highlightCurrentPlayer(model.getCurrentPlayer());
+    }
   }
 
-  private void setupUI() {
-    boardView = new BoardView(game.getBoard());
+  private void handleRollDice() {
+    try {
+      if (model.isFinished()) {
+        view.showMessage("Game Over", "The game is already finished. Start a new game to play again.");
+        return;
+      }
 
-    statusText = new Text("Welcome to Snakes and Ladders!");
-    statusText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+      Player currentPlayer = model.getCurrentPlayer();
 
-    diceView = new DiceView();
+      // Check if player should skip turn
+      if (currentPlayer.getSkipsNextTurn()) {
+        currentPlayer.setSkipsNextTurn(false);
+        view.showMessage("Skip Turn",
+          currentPlayer.getName() + " skips this turn.");
 
-    rollButton = new Button("Roll Dice");
-    //rollButton.setOnAction(e -> handleRollDice());
-    rollButton.setDisable(game.getPlayers().isEmpty() || animationInProgress);
+        // Move to next player
+        int nextPlayerIndex = (model.getPlayers().indexOf(currentPlayer) + 1) % model.getPlayers().size();
+        Player nextPlayer = model.getPlayers().get(nextPlayerIndex);
+        view.highlightCurrentPlayer(nextPlayer);
+        return;
+      }
 
-    newGameButton = new Button("New Game");
-    //newGameButton.setOnAction(e -> newGameDialog());
+      // Play turn - model will notify us via observer pattern
+      model.playTurn(currentPlayer);
 
-    Button settingsButton = new Button("Settings");
-    //settingsButton.setOnAction(e -> showSettings());
+    } catch (Exception e) {
+      view.showError("Error during turn", e.getMessage());
+    }
+  }
 
-    Button loadGameButton = new Button("Load Game");
-    //loadGameButton.setOnAction(e -> handleLoadGame());
+  private void handleNewGame() {
+    try {
+      // Get existing players
+      List<Player> existingPlayers = model.getPlayers();
 
-    HBox controlsBox = new HBox(rollButton, newGameButton, settingsButton, loadGameButton);
-    controlsBox.setAlignment(Pos.CENTER);
-    controlsBox.setPadding(new Insets(10));
+      // Reset the model
+      model.createBoard();
+      model.createDice(2);
 
-    HBox topBar = new HBox(20, statusText, diceView);
-    topBar.setAlignment(Pos.CENTER);
-    topBar.setPadding(new Insets(10));
+      // Clear players
+      model.getPlayers().clear();
 
-    playerInfoView = new PlayerInfoView(game.getPlayers(), boardView);
+      // Add players back with reset positions
+      for (Player oldPlayer : existingPlayers) {
+        Player newPlayer = new Player(oldPlayer.getName(), model, oldPlayer.getTokenType());
+        model.addPlayer(newPlayer);
+        newPlayer.placeOnTile(model.getBoard().getTile(1));
+      }
 
-    rootPane.setCenter(boardView);
-    rootPane.setTop(topBar);
-    rootPane.setBottom(controlsBox);
-    rootPane.setRight(playerInfoView);
+      // Update view
+      view.renderBoard(model.getBoard());
+      view.updatePlayersList(model.getPlayers());
+      view.highlightCurrentPlayer(model.getCurrentPlayer());
 
-    rootPane.setPadding(new Insets(10));
+      // Re-enable roll button if it was disabled
+      view.showMessage("New Game", "A new game has been started.");
+
+    } catch (Exception e) {
+      view.showError("Error creating new game", e.getMessage());
+    }
+  }
+
+  private void handleSaveGame() {
+    try {
+      String filename = view.showSaveDialog();
+      if (filename != null && !filename.isEmpty()) {
+        model.saveGame(filename);
+        view.showMessage("Game Saved", "Game successfully saved to " + filename);
+      }
+    } catch (BoardGameException e) {
+      view.showError("Error Saving Game", e.getMessage());
+    }
+  }
+
+  private void handleLoadGame() {
+    try {
+      String filename = view.showLoadDialog();
+      if (filename != null && !filename.isEmpty()) {
+        model.loadGame(filename);
+        view.renderBoard(model.getBoard());
+        view.updatePlayersList(model.getPlayers());
+        view.highlightCurrentPlayer(model.getCurrentPlayer());
+        view.showMessage("Game Loaded", "Game successfully loaded from " + filename);
+      }
+    } catch (BoardGameException e) {
+      view.showError("Error Loading Game", e.getMessage());
+    }
+  }
+
+  @Override
+  public void onGameEvent(GameEvent event) {
+    GameEventType type = event.getType();
+
+    switch (type) {
+      case BOARD_CREATED:
+        view.renderBoard(model.getBoard());
+        break;
+
+      case PLAYER_ADDED:
+        view.updatePlayersList(model.getPlayers());
+        break;
+
+      case DICE_ROLLED:
+        view.showDiceRoll(event.getPlayer(), event.getDiceRoll());
+        break;
+
+      case PLAYER_MOVED:
+        view.movePlayer(event.getPlayer(), event.getOldPosition(), event.getNewPosition());
+        break;
+
+      case ACTION_PERFORMED:
+        view.showAction(event.getPlayer(), event.getAction());
+        break;
+
+      case TURN_CHANGED:
+        view.highlightCurrentPlayer(event.getPlayer());
+        break;
+
+      case GAME_OVER:
+        view.showGameOver(event.getPlayer());
+        break;
+
+      // Add cases for LADDER_CLIMBED and CHUTE_SLID if added to GameEventType
+      default:
+        // No specific handling for other event types
+        break;
+    }
   }
 }
