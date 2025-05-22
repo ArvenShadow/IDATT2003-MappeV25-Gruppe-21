@@ -7,6 +7,7 @@ import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -197,8 +198,8 @@ public class BoardGameViewImpl implements BoardGameView {
     if (action != null) {
       if (action instanceof LadderAction) {
         LadderAction ladderAction = (LadderAction) action;
-        boolean isUp = ladderAction.getDestinationTileId() > player.getCurrentTile().getTileId();
-        actionDesc = isUp ? "climbs up a ladder" : "slides down a chute";
+
+        actionDesc = ladderAction.isLadder() ? "climbs up a ladder" : "slides down a chute";
       } else if (action.getClass().getSimpleName().contains("Skip")) {
         actionDesc = "will skip next turn";
       }
@@ -206,6 +207,7 @@ public class BoardGameViewImpl implements BoardGameView {
 
     statusLabel.setText(player.getName() + " " + actionDesc);
   }
+
 
   @Override
   public void showActionWithAnimation(Player player, TileAction action, int destinationTileId, Runnable onComplete) {
@@ -216,8 +218,9 @@ public class BoardGameViewImpl implements BoardGameView {
     String actionDesc = "special action";
     if (action != null) {
       if (action instanceof LadderAction) {
-        boolean isUp = destinationTileId > player.getCurrentTile().getTileId();
-        actionDesc = isUp ? "climbs up a ladder" : "slides down a chute";
+        LadderAction ladderAction = (LadderAction) action;
+
+        actionDesc = ladderAction.isLadder() ? "climbs up a ladder" : "slides down a chute";
       } else if (action.getClass().getSimpleName().contains("Skip")) {
         actionDesc = "will skip next turn";
       }
@@ -265,34 +268,41 @@ public class BoardGameViewImpl implements BoardGameView {
     // Disable roll button
     rollButton.setDisable(true);
 
-    // Create alert dialog
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Game Over");
-    alert.setHeaderText("We have a winner!");
-    alert.setContentText(winner.getName() + " has won the game!");
+    // Use Platform.runLater to ensure dialog is shown after animation processing
+    Platform.runLater(() -> {
+      // Create alert dialog
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle("Game Over");
+      alert.setHeaderText("We have a winner!");
+      alert.setContentText(winner.getName() + " has won the game!");
 
-    // Show alert after a short delay
-    PauseTransition delay = new PauseTransition(Duration.seconds(1));
-    delay.setOnFinished(e -> alert.showAndWait());
-    delay.play();
+      // Use show() instead of showAndWait() to avoid blocking
+      alert.show();
+    });
   }
 
   @Override
   public void showError(String title, String message) {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
+    // Also fix this method to avoid potential issues during animations
+    Platform.runLater(() -> {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle(title);
+      alert.setHeaderText(null);
+      alert.setContentText(message);
+      alert.show();
+    });
   }
 
   @Override
   public void showMessage(String title, String message) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
+    // Also fix this method to avoid potential issues during animations
+    Platform.runLater(() -> {
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle(title);
+      alert.setHeaderText(null);
+      alert.setContentText(message);
+      alert.show();
+    });
   }
 
   @Override
