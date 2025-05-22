@@ -46,6 +46,8 @@ public class NavigationManager implements NavigationHandler {
     primaryStage.setTitle(title);
     primaryStage.setMinWidth(800);
     primaryStage.setMinHeight(600);
+    primaryStage.setFullScreen(true);
+    primaryStage.setFullScreenExitHint("");
 
     // Create initial game model
     this.boardGame = new BoardGame();
@@ -80,9 +82,9 @@ public class NavigationManager implements NavigationHandler {
   @Override
   public void navigateBack() {
     if (navigationHistory.size() > 1) {
-      navigationHistory.pop(); // Remove current
-      NavTo previous = navigationHistory.pop(); // Get previous
-      navigateTo(previous); // Navigate to previous
+      navigationHistory.pop();
+      NavTo previous = navigationHistory.pop();
+      navigateTo(previous);
     }
   }
 
@@ -136,7 +138,7 @@ public class NavigationManager implements NavigationHandler {
 
   private void showLoadGameScreen() {
     // Implementation for load game screen
-    // For now, we'll create a simple placeholder
+    // For now, a simple placeholder
     javafx.scene.layout.VBox loadGameView = new javafx.scene.layout.VBox();
     loadGameView.getChildren().add(new javafx.scene.control.Label("Load Game Screen - To be implemented"));
 
