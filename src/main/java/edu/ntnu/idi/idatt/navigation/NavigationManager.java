@@ -98,8 +98,8 @@ public class NavigationManager implements NavigationHandler {
 
   private void showCharacterSelection() {
     // Initialize a new game
-    boardGame = new BoardGame();
-    boardGame.createBoard();
+    //boardGame = new BoardGame();
+    //boardGame.createBoard();
     boardGame.createDice(2);
 
     CharacterSelectionView characterSelectionView = new CharacterSelectionView();
@@ -152,14 +152,12 @@ public class NavigationManager implements NavigationHandler {
     try {
       boardGame.loadBoardFromFile(filepath);
 
-      System.out.println("Brett lastet: " + boardGame.getBoard().getNumRows() +
-              " x " + boardGame.getBoard().getNumCols());
-
       navigateTo(NavTo.CHARACTER_SELECTION);
     } catch (Exception e) {
-      System.err.println("Feil ved lasting av brett: " + e.getMessage());
+      System.err.println("Error loading board: " + e.getMessage());
     }
   }   //This was generated with help by ChatGPT for aid with debugging (hence the language mismatch)
+      //EDIT: Since been patched
 
 
   public Stage getPrimaryStage() {
