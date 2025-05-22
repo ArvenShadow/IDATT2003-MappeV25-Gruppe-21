@@ -28,9 +28,9 @@ public interface BoardGameView {
 
   Parent getRoot();
 
-  void setTurnCompletionCallback(Runnable callback);
+
   void setRollDiceHandler(Runnable handler);
   void setNewGameHandler(Runnable handler);
   void setLoadGameHandler(Runnable handler);
-  void setSettingsHandler(Runnable handler);
+
 }

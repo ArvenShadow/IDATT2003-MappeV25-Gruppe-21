@@ -306,10 +306,6 @@ public class BoardGameViewImpl implements BoardGameView {
     pause.play();
   }
 
-  @Override
-  public void setTurnCompletionCallback(Runnable callback) {
-    this.turnCompletionCallback = callback;
-  }
 
   @Override
   public void highlightCurrentPlayer(Player player) {
@@ -373,10 +369,6 @@ public class BoardGameViewImpl implements BoardGameView {
     this.loadGameHandler = handler;
   }
 
-  @Override
-  public void setSettingsHandler(Runnable handler) {
-    // No longer needed as settings are handled internally
-  }
 
   public Parent getRoot() {
     return mainStack; // Return main stack instead of root BorderPane

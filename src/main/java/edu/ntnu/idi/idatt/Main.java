@@ -1,6 +1,5 @@
 package edu.ntnu.idi.idatt;
 
-import edu.ntnu.idi.idatt.controller.BoardSelectionController;
 import edu.ntnu.idi.idatt.navigation.NavTo;
 import edu.ntnu.idi.idatt.navigation.NavigationManager;
 import edu.ntnu.idi.idatt.view.BoardSelectionView;
@@ -19,11 +18,6 @@ public class Main extends Application {
     nav.navigateTo(NavTo.START_SCREEN);
 
     primaryStage.show();
-  }
-
-  private void switchScene(Stage primaryStage, Scene newScene) {
-    primaryStage.setScene(newScene);
-    primaryStage.setFullScreen(true);
   }
 
   public static void main(String[] args) {

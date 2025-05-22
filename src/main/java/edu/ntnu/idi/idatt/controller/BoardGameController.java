@@ -1,6 +1,6 @@
 package edu.ntnu.idi.idatt.controller;
 
-import edu.ntnu.idi.idatt.action.LadderAction;
+
 import edu.ntnu.idi.idatt.event.GameEvent;
 import edu.ntnu.idi.idatt.event.GameEventType;
 import edu.ntnu.idi.idatt.event.GameObserver;

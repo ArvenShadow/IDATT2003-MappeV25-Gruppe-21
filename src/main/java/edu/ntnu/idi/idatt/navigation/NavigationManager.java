@@ -1,9 +1,6 @@
 package edu.ntnu.idi.idatt.navigation;
 
 import edu.ntnu.idi.idatt.controller.BoardGameController;
-import edu.ntnu.idi.idatt.controller.BoardSelectionController;
-import edu.ntnu.idi.idatt.io.BoardJsonHandler;
-import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.PlayerData;
@@ -72,9 +69,6 @@ public class NavigationManager implements NavigationHandler {
         break;
       case LOAD_GAME_SCREEN:
         showLoadGameScreen();
-        break;
-      case SETTINGS_SCREEN:
-        showSettingsScreen();
         break;
     }
   }
@@ -167,18 +161,6 @@ public class NavigationManager implements NavigationHandler {
     }
   }   //This was generated with help by ChatGPT for aid with debugging (hence the language mismatch)
 
-  private void showSettingsScreen() {
-    // Implementation for settings screen
-    // Simple placeholder
-    javafx.scene.layout.VBox settingsView = new javafx.scene.layout.VBox();
-    settingsView.getChildren().add(new javafx.scene.control.Label("Settings Screen - To be implemented"));
-
-    javafx.scene.control.Button backButton = new javafx.scene.control.Button("Back");
-    backButton.setOnAction(e -> navigateBack());
-    settingsView.getChildren().add(backButton);
-
-    setRoot(settingsView);
-  }
 
   public Stage getPrimaryStage() {
     return primaryStage;

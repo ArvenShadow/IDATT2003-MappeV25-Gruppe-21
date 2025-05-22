@@ -1,11 +1,9 @@
 package edu.ntnu.idi.idatt.view;
 
-import edu.ntnu.idi.idatt.controller.BoardSelectionController;
 import edu.ntnu.idi.idatt.navigation.NavigationManager;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
