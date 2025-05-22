@@ -1,10 +1,14 @@
 package edu.ntnu.idi.idatt.navigation;
 
 import edu.ntnu.idi.idatt.controller.BoardGameController;
+import edu.ntnu.idi.idatt.controller.BoardSelectionController;
+import edu.ntnu.idi.idatt.io.BoardJsonHandler;
+import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.PlayerData;
 import edu.ntnu.idi.idatt.view.BoardGameViewImpl;
+import edu.ntnu.idi.idatt.view.BoardSelectionView;
 import edu.ntnu.idi.idatt.view.CharacterSelectionView;
 import edu.ntnu.idi.idatt.view.MainMenuView;
 import javafx.scene.Parent;
@@ -42,6 +46,8 @@ public class NavigationManager implements NavigationHandler {
     primaryStage.setTitle(title);
     primaryStage.setMinWidth(800);
     primaryStage.setMinHeight(600);
+    primaryStage.setFullScreen(true);
+    primaryStage.setFullScreenExitHint("");
 
     // Create initial game model
     this.boardGame = new BoardGame();
@@ -61,6 +67,9 @@ public class NavigationManager implements NavigationHandler {
       case GAME_SCREEN:
         showGameScreen();
         break;
+      case BOARD_SELECTION_SCREEN:
+        showBoardSelectionScreen();
+        break;
       case LOAD_GAME_SCREEN:
         showLoadGameScreen();
         break;
@@ -73,20 +82,20 @@ public class NavigationManager implements NavigationHandler {
   @Override
   public void navigateBack() {
     if (navigationHistory.size() > 1) {
-      navigationHistory.pop(); // Remove current
-      NavTo previous = navigationHistory.pop(); // Get previous
-      navigateTo(previous); // Navigate to previous
+      navigationHistory.pop();
+      NavTo previous = navigationHistory.pop();
+      navigateTo(previous);
     }
   }
 
   @Override
-  public void setRoot(Parent root) {
-    scene.setRoot(root);
+  public void setRoot(Parent newRoot) {
+    scene.setRoot(newRoot);
   }
 
   private void showMainMenu() {
     MainMenuView mainMenuView = new MainMenuView();
-    mainMenuView.setNewGameHandler(() -> navigateTo(NavTo.CHARACTER_SELECTION));
+    mainMenuView.setNewGameHandler(() -> navigateTo(NavTo.BOARD_SELECTION_SCREEN));
     mainMenuView.setLoadGameHandler(() -> navigateTo(NavTo.LOAD_GAME_SCREEN));
     mainMenuView.setExitHandler(() -> primaryStage.close());
 
@@ -129,7 +138,7 @@ public class NavigationManager implements NavigationHandler {
 
   private void showLoadGameScreen() {
     // Implementation for load game screen
-    // For now, we'll create a simple placeholder
+    // For now, a simple placeholder
     javafx.scene.layout.VBox loadGameView = new javafx.scene.layout.VBox();
     loadGameView.getChildren().add(new javafx.scene.control.Label("Load Game Screen - To be implemented"));
 
@@ -138,6 +147,24 @@ public class NavigationManager implements NavigationHandler {
     loadGameView.getChildren().add(backButton);
 
     setRoot(loadGameView);
+  }
+
+  private void showBoardSelectionScreen() {
+    BoardSelectionView view = new BoardSelectionView();
+    setRoot(view.getRoot());
+  }
+
+  public void selectBoardAndContinue(String filepath) {
+    try {
+      boardGame.loadBoardFromFile(filepath); // ✅ bruker metoden i BoardGame
+
+      System.out.println("Brett lastet: " + boardGame.getBoard().getNumRows() +
+              " x " + boardGame.getBoard().getNumCols());
+
+      navigateTo(NavTo.CHARACTER_SELECTION);
+    } catch (Exception e) {
+      System.err.println("Feil ved lasting av brett: " + e.getMessage());
+    }
   }
 
   private void showSettingsScreen() {

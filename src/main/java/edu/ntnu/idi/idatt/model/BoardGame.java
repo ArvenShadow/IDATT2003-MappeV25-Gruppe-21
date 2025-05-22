@@ -6,6 +6,7 @@ import edu.ntnu.idi.idatt.event.GameObserver;
 import edu.ntnu.idi.idatt.event.ObservableGame;
 import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.action.TileAction;
+import edu.ntnu.idi.idatt.exception.InvalidGameStateException;
 import edu.ntnu.idi.idatt.io.BoardJsonHandler;
 
 import java.util.ArrayList;
@@ -38,17 +39,15 @@ public class BoardGame implements ObservableGame {
     }
   }
 
+  public void loadBoardFromFile(String filepath) throws Exception {
+    BoardJsonHandler boardHandler = new BoardJsonHandler();
+    this.board = boardHandler.readFromFile(filepath);
+    notifyObservers(new GameEvent(GameEventType.BOARD_CREATED, null));
+  }
+
   public void createDice(int numberOfDice) {
     this.dice = new Dice(numberOfDice);
     notifyObservers(new GameEvent(GameEventType.DICE_CREATED, null));
-  }
-
-  public void addPlayer(Player player) {
-    if (player == null) {
-      throw new IllegalArgumentException("Player cannot be null");
-    }
-    players.add(player);
-    notifyObservers(new GameEvent(GameEventType.PLAYER_ADDED, player));
   }
 
   public void playOneRound() {
@@ -120,6 +119,9 @@ public class BoardGame implements ObservableGame {
    * Advances to the next player
    */
   public void advanceToNextPlayer() {
+    if (players.isEmpty()) {
+      return;
+    }
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     notifyObservers(new GameEvent(GameEventType.TURN_CHANGED, getCurrentPlayer()));
   }
@@ -139,6 +141,22 @@ public class BoardGame implements ObservableGame {
     if (finished && winner != null) {
       notifyObservers(new GameEvent(GameEventType.GAME_OVER, winner));
     }
+  }
+
+  /**
+   * Resets the current player index to 0
+   */
+  public void resetCurrentPlayerIndex() {
+    this.currentPlayerIndex = 0;
+  }
+
+  /**
+   * Resets the entire game state for a new game
+   */
+  public void resetGameState() {
+    this.gameFinished = false;
+    this.winner = null;
+    this.currentPlayerIndex = 0;
   }
 
   public boolean isFinished() {
@@ -162,7 +180,21 @@ public class BoardGame implements ObservableGame {
   }
 
   public Player getCurrentPlayer() {
+    if (players.isEmpty()) {
+      throw new InvalidGameStateException("No players in the game");
+    }
     return players.get(currentPlayerIndex);
+  }
+
+  public void addPlayer(Player player) {
+    if (player == null) {
+      throw new IllegalArgumentException("Player cannot be null");
+    }
+    if (players.size() >= 5) {
+      throw new InvalidGameStateException("Maximum 5 players allowed");
+    }
+    players.add(player);
+    notifyObservers(new GameEvent(GameEventType.PLAYER_ADDED, player));
   }
 
   @Override
@@ -189,9 +221,7 @@ public class BoardGame implements ObservableGame {
       this.board = boardHandler.readFromFile(filename);
 
       // Reset game state
-      this.gameFinished = false;
-      this.winner = null;
-      this.currentPlayerIndex = 0;
+      resetGameState();
 
       // Place players at start position or restore their positions
       // For simplicity in this implementation, just place them at start
