@@ -57,21 +57,18 @@ public class BoardGameController {
   /**
    * Handles the logic for rolling the dice during a player's turn in the board game.
    *
-   * This method performs most of the steps necessary to complete a whole game turn.
+   *<p>This method performs most of the steps necessary to complete a whole game turn.
    * It checks for actions, commands animations and so forth,
    * And updates the model and view accordingly
-   *
    */
 
   private void handleReturnToMenu() {
     try {
       model.getPlayers().clear();
-      model.setGameFinished(false);
-      model.setWinner(null);
       model.resetGameState();
       // Navigate back to character selection for full game setup
       edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
-        .navigateTo(NavTo.START_SCREEN);
+          .navigateTo(NavTo.START_SCREEN);
     } catch (Exception e) {
       view.showError("Error starting new game", e.getMessage());
     }
@@ -94,7 +91,7 @@ public class BoardGameController {
       if (currentPlayer.getSkipsNextTurn()) {
         currentPlayer.setSkipsNextTurn(false);
         view.showMessage("Skip Turn",
-          currentPlayer.getName() + " skips this turn.");
+            currentPlayer.getName() + " skips this turn.");
 
         // Move to next player
         model.advanceToNextPlayer();
@@ -170,7 +167,7 @@ public class BoardGameController {
   /**
    * Completes the current player's turn in the board game.
    *
-   * The method checks if the current player has won the game by reaching the final tile.
+   *<p>The method checks if the current player has won the game by reaching the final tile.
    * If so, it updates the game state to finished and declares the winner.
    * Otherwise, the turn moves to the next player, and the view is updated to
    * highlight the new current player. Finally, it marks any animation sequence as complete.
@@ -197,7 +194,7 @@ public class BoardGameController {
   /**
    * Handles user interaction for starting a new game.
    *
-   * This method navigates the application to the character selection screen,
+   * <p>This method navigates the application to the character selection screen,
    * where a new game can be fully set up by selecting characters and other options.
    * If an error occurs during the navigation process, it displays an error message
    * to the user.
@@ -205,12 +202,10 @@ public class BoardGameController {
   private void handleNewGame() {
     try {
       model.getPlayers().clear();
-      model.setGameFinished(false);
-      model.setWinner(null);
       model.resetGameState();
       // Navigate back to character selection for full game setup
       edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
-        .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);
+          .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);
     } catch (Exception e) {
       view.showError("Error starting new game", e.getMessage());
     }
@@ -239,7 +234,14 @@ public class BoardGameController {
   }
 
   /**
-   * Handles dice count changes from the integrated settings panel
+   * Handles changing the number of dice used in the game and updates the model and view accordingly.
+   *
+   * <p>This method checks if the requested dice count is different from the current dice count.
+   * If so, it updates the model with the new number of dice and refreshes the view to reflect
+   * the change. If an error occurs during this process, an error message is displayed using the view.
+   *</p>
+   *
+   * @param newDiceCount the new number of dice to set in the game
    */
   private void handleDiceCountChange(int newDiceCount) {
     try {
@@ -253,7 +255,7 @@ public class BoardGameController {
         view.updateDiceView(newDiceCount);
 
         view.showMessage("Settings Updated",
-          "Number of dice changed from " + currentDiceCount + " to " + newDiceCount);
+            "Number of dice changed from " + currentDiceCount + " to " + newDiceCount);
       }
     } catch (Exception e) {
       view.showError("Error Updating Settings", e.getMessage());
