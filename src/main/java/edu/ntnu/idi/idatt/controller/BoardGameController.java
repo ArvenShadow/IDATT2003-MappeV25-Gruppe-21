@@ -1,9 +1,6 @@
 package edu.ntnu.idi.idatt.controller;
 
 
-import edu.ntnu.idi.idatt.event.GameEvent;
-import edu.ntnu.idi.idatt.event.GameEventType;
-import edu.ntnu.idi.idatt.event.GameObserver;
 import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
@@ -11,7 +8,7 @@ import edu.ntnu.idi.idatt.model.Tile;
 import edu.ntnu.idi.idatt.view.BoardGameView;
 import edu.ntnu.idi.idatt.view.BoardGameViewImpl;
 
-public class BoardGameController implements GameObserver {
+public class BoardGameController {
   private BoardGame model;
   private BoardGameView view;
   private boolean animationInProgress = false;
@@ -20,8 +17,6 @@ public class BoardGameController implements GameObserver {
     this.model = model;
     this.view = view;
 
-    // Register as observer
-    model.addObserver(this);
 
     // Set up view event handlers
     view.setRollDiceHandler(this::handleRollDice);
@@ -197,47 +192,4 @@ public class BoardGameController implements GameObserver {
     }
   }
 
-  @Override
-  public void onGameEvent(GameEvent event) {
-    GameEventType type = event.getType();
-
-    switch (type) {
-      case BOARD_CREATED:
-        view.renderBoard(model.getBoard());
-        break;
-
-      case PLAYER_ADDED:
-        view.updatePlayersList(model.getPlayers());
-        break;
-
-      case DICE_ROLLED:
-        if (event.getDiceValues() != null) {
-          view.showDiceRoll(event.getPlayer(), event.getDiceRoll(), event.getDiceValues());
-        } else {
-          view.showDiceRoll(event.getPlayer(), event.getDiceRoll());
-        }
-        break;
-
-      case PLAYER_MOVED:
-        view.movePlayer(event.getPlayer(), event.getOldPosition(), event.getNewPosition());
-        break;
-
-      case ACTION_PERFORMED:
-        view.showAction(event.getPlayer(), event.getAction());
-        break;
-
-      case TURN_CHANGED:
-        view.highlightCurrentPlayer(event.getPlayer());
-        break;
-
-      case GAME_OVER:
-        view.showGameOver(event.getPlayer());
-        break;
-
-      // Add cases for LADDER_CLIMBED and CHUTE_SLID if added to GameEventType
-      default:
-        // No specific handling for other event types
-        break;
-    }
-  }
 }

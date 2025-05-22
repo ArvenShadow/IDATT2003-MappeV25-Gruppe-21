@@ -1,8 +1,5 @@
 package edu.ntnu.idi.idatt.model;
 
-import edu.ntnu.idi.idatt.event.GameEvent;
-import edu.ntnu.idi.idatt.event.GameEventType;
-import edu.ntnu.idi.idatt.event.ObservableGame;
 
 public class Player {
   private String name;
@@ -63,13 +60,6 @@ public class Player {
 
       // Place player on new tile
       placeOnTile(targetTile);
-
-      // If game implements ObservableGame, notify about the move
-      if (game instanceof ObservableGame) {
-        ((ObservableGame) game).notifyObservers(
-          new GameEvent(GameEventType.PLAYER_MOVED, this, oldTile.getTileId(), targetTile.getTileId())
-        );
-      }
 
       // Execute tile action if present
       targetTile.landAction(this);
