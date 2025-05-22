@@ -14,7 +14,7 @@ public class BoardSelectionView {
     private final BoardSelectionController controller;
 
     public BoardSelectionView(BoardSelectionController controller) {
-        this.controller = controller; // Controller håndterer logikken
+        this.controller = controller;
     }
 
     public BorderPane getMainMenuLayout() {
@@ -66,7 +66,8 @@ public class BoardSelectionView {
         BorderPane layout = getMainMenuLayout();
         layout.getStyleClass().add("main-menu");
 
-        Scene scene = new Scene(layout, 800, 600);
+        Scene scene = new Scene(layout,800,600);
+
 
         try {
             String css = getClass().getResource("/styles/Select_board.css").toExternalForm();

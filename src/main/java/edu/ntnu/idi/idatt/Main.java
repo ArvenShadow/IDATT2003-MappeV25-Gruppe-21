@@ -24,8 +24,8 @@ public class Main extends Application {
 
 
     mainMenuView.setNewGameHandler(() -> {
-      Scene boardSelectionScene = selectionView.getStyledScene(); // Stylet board selection
-      primaryStage.setScene(boardSelectionScene);
+      Scene boardSelectionScene = selectionView.getStyledScene();
+      switchScene(primaryStage, boardSelectionScene);
     });
 
 
@@ -34,6 +34,11 @@ public class Main extends Application {
     primaryStage.setFullScreen(true);
     primaryStage.setFullScreenExitHint("");
     primaryStage.show();
+  }
+
+  private void switchScene(Stage primaryStage, Scene newScene) {
+    primaryStage.setScene(newScene);
+    primaryStage.setFullScreen(true);
   }
 
   public static void main(String[] args) {

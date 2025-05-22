@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt.controller;
 
 import edu.ntnu.idi.idatt.io.BoardJsonHandler;
 import edu.ntnu.idi.idatt.model.Board;
+import edu.ntnu.idi.idatt.view.CharacterSelectionView;
 import edu.ntnu.idi.idatt.view.MainMenuView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -18,13 +19,12 @@ public class BoardSelectionController {
         System.out.println("Loading board from " + filepath);
 
         try {
-
             BoardJsonHandler handler = new BoardJsonHandler();
             Board board = handler.readFromFile(filepath);
             System.out.println("Board loaded successfully! Rows: " + board.getNumRows() + ", Columns: " + board.getNumCols());
 
 
-            navigateToMainMenu();
+            navigateToCharacterSelection();
 
         } catch (Exception e) {
 
@@ -32,12 +32,20 @@ public class BoardSelectionController {
         }
     }
 
+    private void navigateToCharacterSelection(){
+        CharacterSelectionView characterSelectionView = new CharacterSelectionView();
+        Scene characterSelectionScene = new Scene(characterSelectionView.getRoot());
+        primaryStage.setScene(characterSelectionScene);
+        primaryStage.setFullScreen(true);
+
+        System.out.println("Navigated to Character Selection");
+
+    }
+
 
     private void navigateToMainMenu() {
         MainMenuView mainMenuView = new MainMenuView();
         Scene mainMenuScene = mainMenuView.getStyledScene();
-
-
 
         mainMenuView.setNewGameHandler(() -> System.out.println("New game started!"));
         mainMenuView.setLoadGameHandler(() -> System.out.println("Load game selected."));
@@ -45,7 +53,6 @@ public class BoardSelectionController {
             System.out.println("Exiting program...");
             System.exit(0);
         });
-
 
         primaryStage.setScene(mainMenuScene);
     }
