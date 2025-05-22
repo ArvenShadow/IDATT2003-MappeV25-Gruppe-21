@@ -9,10 +9,7 @@ import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.Tile;
 import edu.ntnu.idi.idatt.view.BoardGameView;
-import edu.ntnu.idi.idatt.view.SettingsDialog;
-import javafx.stage.Stage;
-
-import java.util.List;
+import edu.ntnu.idi.idatt.view.BoardGameViewImpl;
 
 public class BoardGameController implements GameObserver {
   private BoardGame model;
@@ -30,19 +27,22 @@ public class BoardGameController implements GameObserver {
     view.setRollDiceHandler(this::handleRollDice);
     view.setNewGameHandler(this::handleNewGame);
     view.setLoadGameHandler(this::handleLoadGame);
-    view.setSettingsHandler(this::handleSettings);
+
+    // Set up dice count change handler for integrated settings
+    if (view instanceof BoardGameViewImpl) {
+      ((BoardGameViewImpl) view).setDiceCountChangeHandler(this::handleDiceCountChange);
+    }
 
     // Initialize view with current game state
     view.renderBoard(model.getBoard());
     view.updatePlayersList(model.getPlayers());
 
-    // Highlight current player
+    // Highlight current player only if there are players
     if (!model.getPlayers().isEmpty()) {
       view.highlightCurrentPlayer(model.getCurrentPlayer());
     }
   }
 
-  // In BoardGameController.java
   private void handleRollDice() {
     if (animationInProgress) {
       return; // Prevent actions during animations
@@ -150,37 +150,15 @@ public class BoardGameController implements GameObserver {
   }
 
   private void handleNewGame() {
+
     try {
-      // Get existing players
-      List<Player> existingPlayers = model.getPlayers();
-
-      // Reset the model
-      model.createBoard();
-      model.createDice(2);
-
-      // Clear players
-      model.getPlayers().clear();
-
-      // Add players back with reset positions
-      for (Player oldPlayer : existingPlayers) {
-        Player newPlayer = new Player(oldPlayer.getName(), model, oldPlayer.getTokenType());
-        model.addPlayer(newPlayer);
-        newPlayer.placeOnTile(model.getBoard().getTile(1));
-      }
-
-      // Update view
-      view.renderBoard(model.getBoard());
-      view.updatePlayersList(model.getPlayers());
-      view.highlightCurrentPlayer(model.getCurrentPlayer());
-
-      // Re-enable roll button if it was disabled
-      view.showMessage("New Game", "A new game has been started.");
-
+      // Navigate back to character selection for full game setup
+      edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
+        .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);
     } catch (Exception e) {
-      view.showError("Error creating new game", e.getMessage());
+      view.showError("Error starting new game", e.getMessage());
     }
   }
-
 
   private void handleLoadGame() {
     try {
@@ -197,29 +175,27 @@ public class BoardGameController implements GameObserver {
     }
   }
 
-  private void handleSettings() {
-    Stage primaryStage = (Stage) view.getRoot().getScene().getWindow();
-    SettingsDialog dialog = new SettingsDialog(primaryStage, model.getDice().getNumberOfDice());
+  /**
+   * Handles dice count changes from the integrated settings panel
+   */
+  private void handleDiceCountChange(int newDiceCount) {
+    try {
+      int currentDiceCount = model.getDice().getNumberOfDice();
 
-    dialog.showAndWait().ifPresent(result -> {
-      int newDiceCount = result.getDiceCount();
-      if (newDiceCount != model.getDice().getNumberOfDice()) {
-        try {
-          // Update the model
-          model.getDice().setNumberOfDice(newDiceCount);
+      if (newDiceCount != currentDiceCount) {
+        // Update the model
+        model.getDice().setNumberOfDice(newDiceCount);
 
-          // Update the view
-          view.updateDiceView(model.getDice().getNumberOfDice());
+        // Update the view
+        view.updateDiceView(newDiceCount);
 
-          view.showMessage("Settings Updated",
-            "Number of dice changed to " + newDiceCount);
-        } catch (Exception e) {
-          view.showError("Error Updating Settings", e.getMessage());
-        }
+        view.showMessage("Settings Updated",
+          "Number of dice changed from " + currentDiceCount + " to " + newDiceCount);
       }
-    });
+    } catch (Exception e) {
+      view.showError("Error Updating Settings", e.getMessage());
+    }
   }
-
 
   @Override
   public void onGameEvent(GameEvent event) {
