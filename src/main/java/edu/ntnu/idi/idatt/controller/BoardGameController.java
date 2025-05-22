@@ -1,7 +1,7 @@
 package edu.ntnu.idi.idatt.controller;
 
 
-
+import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.Tile;
@@ -35,6 +35,7 @@ public class BoardGameController {
     // Set up view event handlers
     view.setRollDiceHandler(this::handleRollDice);
     view.setNewGameHandler(this::handleNewGame);
+    view.setLoadGameHandler(this::handleLoadGame);
 
     // Set up dice count change handler for integrated settings
     if (view instanceof BoardGameViewImpl) {
@@ -53,6 +54,7 @@ public class BoardGameController {
 
   /**
    * Handles the logic for rolling the dice during a player's turn in the board game.
+   *
    * This method performs most of the steps necessary to complete a whole game turn.
    * It checks for actions, commands animations and so forth,
    * And updates the model and view accordingly
@@ -76,7 +78,7 @@ public class BoardGameController {
       if (currentPlayer.getSkipsNextTurn()) {
         currentPlayer.setSkipsNextTurn(false);
         view.showMessage("Skip Turn",
-            currentPlayer.getName() + " skips this turn.");
+          currentPlayer.getName() + " skips this turn.");
 
         // Move to next player
         model.advanceToNextPlayer();
@@ -152,7 +154,7 @@ public class BoardGameController {
   /**
    * Completes the current player's turn in the board game.
    *
-   *<p>The method checks if the current player has won the game by reaching the final tile.
+   * The method checks if the current player has won the game by reaching the final tile.
    * If so, it updates the game state to finished and declares the winner.
    * Otherwise, the turn moves to the next player, and the view is updated to
    * highlight the new current player. Finally, it marks any animation sequence as complete.
@@ -179,27 +181,47 @@ public class BoardGameController {
   /**
    * Handles user interaction for starting a new game.
    *
-   * <p>This method navigates the application to the character selection screen,
+   * This method navigates the application to the character selection screen,
    * where a new game can be fully set up by selecting characters and other options.
    * If an error occurs during the navigation process, it displays an error message
    * to the user.
    */
-
   private void handleNewGame() {
 
     try {
       // Navigate back to character selection for full game setup
       edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
-          .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);
+        .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);
     } catch (Exception e) {
       view.showError("Error starting new game", e.getMessage());
     }
   }
 
   /**
-   * Handles dice count changes from the integrated settings panel.
+   * Handles the loading of a saved game state into the board game.
+   *
+   * <p>This method facilitates the restoration of a previously saved game by
+   * interacting with the view to prompt the user for a save file, loading the
+   * game data into the model, and updating the view with the loaded game state.
    */
+  private void handleLoadGame() {
+    try {
+      String filename = view.showLoadDialog();
+      if (filename != null && !filename.isEmpty()) {
+        model.loadGame(filename);
+        view.renderBoard(model.getBoard());
+        view.updatePlayersList(model.getPlayers());
+        view.highlightCurrentPlayer(model.getCurrentPlayer());
+        view.showMessage("Game Loaded", "Game successfully loaded from " + filename);
+      }
+    } catch (BoardGameException e) {
+      view.showError("Error Loading Game", e.getMessage());
+    }
+  }
 
+  /**
+   * Handles dice count changes from the integrated settings panel
+   */
   private void handleDiceCountChange(int newDiceCount) {
     try {
       int currentDiceCount = model.getDice().getNumberOfDice();
@@ -212,7 +234,7 @@ public class BoardGameController {
         view.updateDiceView(newDiceCount);
 
         view.showMessage("Settings Updated",
-            "Number of dice changed from " + currentDiceCount + " to " + newDiceCount);
+          "Number of dice changed from " + currentDiceCount + " to " + newDiceCount);
       }
     } catch (Exception e) {
       view.showError("Error Updating Settings", e.getMessage());
