@@ -5,6 +5,7 @@ import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.Tile;
+import edu.ntnu.idi.idatt.navigation.NavTo;
 import edu.ntnu.idi.idatt.view.BoardGameView;
 import edu.ntnu.idi.idatt.view.BoardGameViewImpl;
 
@@ -33,6 +34,7 @@ public class BoardGameController {
 
 
     // Set up view event handlers
+    view.setReturnToMenuHandler(this::handleReturnToMenu);
     view.setRollDiceHandler(this::handleRollDice);
     view.setNewGameHandler(this::handleNewGame);
     view.setLoadGameHandler(this::handleLoadGame);
@@ -60,6 +62,20 @@ public class BoardGameController {
    * And updates the model and view accordingly
    *
    */
+
+  private void handleReturnToMenu() {
+    try {
+      model.getPlayers().clear();
+      model.setGameFinished(false);
+      model.setWinner(null);
+      model.resetGameState();
+      // Navigate back to character selection for full game setup
+      edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
+        .navigateTo(NavTo.START_SCREEN);
+    } catch (Exception e) {
+      view.showError("Error starting new game", e.getMessage());
+    }
+  }
 
   private void handleRollDice() {
     if (animationInProgress) {
@@ -187,8 +203,11 @@ public class BoardGameController {
    * to the user.
    */
   private void handleNewGame() {
-
     try {
+      model.getPlayers().clear();
+      model.setGameFinished(false);
+      model.setWinner(null);
+      model.resetGameState();
       // Navigate back to character selection for full game setup
       edu.ntnu.idi.idatt.navigation.NavigationManager.getInstance()
         .navigateTo(edu.ntnu.idi.idatt.navigation.NavTo.CHARACTER_SELECTION);

@@ -34,6 +34,7 @@ public class BoardGameViewImpl implements BoardGameView {
   private PlayerInfoView playerInfoView;
   private DiceView diceView;
   private Label statusLabel;
+  private Button menuButton;
   private Button rollButton;
   private Button newGameButton;
   private Button loadButton;
@@ -44,11 +45,11 @@ public class BoardGameViewImpl implements BoardGameView {
   private ClippyNotification clippyNotification;
   private boolean settingsVisible = false;
 
+  private Runnable returnToMenu;
   private Runnable rollDiceHandler;
   private Runnable newGameHandler;
   private Runnable loadGameHandler;
   private Consumer<Integer> diceCountChangeHandler;
-  private Runnable turnCompletionCallback;
 
   private BoardGame model;
 
@@ -105,11 +106,18 @@ public class BoardGameViewImpl implements BoardGameView {
     root.setRight(playerInfoView);
 
     // Game controls at bottom
+    menuButton = new Button("Main Menu");
     rollButton = new Button("Roll Dice");
     newGameButton = new Button("New Game");
     loadButton = new Button("Load Game");
 
     diceView = new DiceView(model.getDice().getNumberOfDice());
+
+    menuButton.setOnAction(e -> {
+      if (returnToMenu != null) {
+        returnToMenu.run();
+      }
+    });
 
     rollButton.setOnAction(e -> {
       if (rollDiceHandler != null) {
@@ -129,7 +137,7 @@ public class BoardGameViewImpl implements BoardGameView {
       }
     });
 
-    controls = new HBox(15, rollButton, diceView, newGameButton, loadButton);
+    controls = new HBox(15, menuButton , rollButton, diceView, newGameButton, loadButton);
     controls.setAlignment(Pos.CENTER);
     controls.setPadding(new Insets(15, 0, 0, 0));
 
@@ -347,11 +355,16 @@ public class BoardGameViewImpl implements BoardGameView {
       new FileChooser.ExtensionFilter("JSON Files", "*.json")
     );
     fileChooser.setInitialDirectory(
-      new File(System.getProperty("user.dir") + "/src/main/resources")
+      new File(System.getProperty("user.dir") + "/src/main/resources/boards")
     );
 
     File file = fileChooser.showOpenDialog(mainStack.getScene().getWindow());
     return file != null ? file.getAbsolutePath() : null;
+  }
+
+  @Override
+  public void setReturnToMenuHandler(Runnable handler) {
+    this.returnToMenu = handler;
   }
 
   @Override
