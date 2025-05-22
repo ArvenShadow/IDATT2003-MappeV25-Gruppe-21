@@ -13,7 +13,7 @@ public class BoardJsonGenerator {
 
     JsonArray tilesArray = new JsonArray();
 
-
+    // Generate all tiles
     for (int id = 1; id <= 100; id++) {
       int row = 9 - ((id - 1) / 10);
       int col = (row % 2 == 1) ? ((id - 1) % 10) : (9 - ((id - 1) % 10));
@@ -23,7 +23,6 @@ public class BoardJsonGenerator {
       tileJson.addProperty("row", row);
       tileJson.addProperty("col", col);
 
-
       if (id < 100) {
         tileJson.addProperty("nextTile", id + 1);
       }
@@ -31,22 +30,33 @@ public class BoardJsonGenerator {
       tilesArray.add(tileJson);
     }
 
-    addAction(tilesArray, 4, 14);
-    addAction(tilesArray, 9, 31);
-    addAction(tilesArray, 20, 38);
-    addAction(tilesArray, 28, 84);
-    addAction(tilesArray, 40, 59);
-    addAction(tilesArray, 51, 67);
-    addAction(tilesArray, 63, 81);
+    // Add ladder actions (going up)
+    addLadderAction(tilesArray, 4, 14);
+    addLadderAction(tilesArray, 9, 31);
+    addLadderAction(tilesArray, 20, 38);
+    addLadderAction(tilesArray, 28, 84);
+    addLadderAction(tilesArray, 40, 59);
+    addLadderAction(tilesArray, 51, 67);
+    addLadderAction(tilesArray, 63, 81);
 
-    addAction(tilesArray, 17, 7);
-    addAction(tilesArray, 54, 34);
-    addAction(tilesArray, 62, 19);
-    addAction(tilesArray, 64, 60);
-    addAction(tilesArray, 87, 24);
-    addAction(tilesArray, 93, 73);
-    addAction(tilesArray, 95, 75);
-    addAction(tilesArray, 99, 78);
+    // Add chute actions (going down)
+    addLadderAction(tilesArray, 17, 7);
+    addLadderAction(tilesArray, 54, 34);
+    addLadderAction(tilesArray, 62, 19);
+    addLadderAction(tilesArray, 64, 60);
+    addLadderAction(tilesArray, 87, 24);
+    addLadderAction(tilesArray, 93, 73);
+    addLadderAction(tilesArray, 95, 75);
+    addLadderAction(tilesArray, 99, 78);
+
+    // Add skip turn actions
+    addSkipTurnAction(tilesArray, 8);
+    addSkipTurnAction(tilesArray, 15);
+    addSkipTurnAction(tilesArray, 33);
+    addSkipTurnAction(tilesArray, 47);
+    addSkipTurnAction(tilesArray, 58);
+    addSkipTurnAction(tilesArray, 77);
+    addSkipTurnAction(tilesArray, 89);
 
     boardJson.add("tiles", tilesArray);
 
@@ -56,7 +66,10 @@ public class BoardJsonGenerator {
     }
   }
 
-  private static void addAction(JsonArray tilesArray, int tileId, int destinationId) {
+  /**
+   * Adds a ladder action (up or down) to the specified tile
+   */
+  private static void addLadderAction(JsonArray tilesArray, int tileId, int destinationId) {
     for (JsonElement element : tilesArray) {
       JsonObject tile = element.getAsJsonObject();
       if (tile.get("id").getAsInt() == tileId) {
@@ -68,13 +81,104 @@ public class BoardJsonGenerator {
       }
     }
   }
+  public static void generateSmallBoard(String outputFilePath) throws IOException {
+    JsonObject boardJson = new JsonObject();
+    boardJson.addProperty("rows", 6);
+    boardJson.addProperty("columns", 6);
+
+    JsonArray tilesArray = new JsonArray();
+
+    for (int id = 1; id <= 36; id++) {
+      int row = 5 - ((id - 1) / 6);
+      int col = (row % 2 == 1) ? ((id - 1) % 6) : (5 - ((id - 1) % 6));
+
+      JsonObject tileJson = new JsonObject();
+      tileJson.addProperty("id", id);
+      tileJson.addProperty("row", row);
+      tileJson.addProperty("col", col);
+
+      if (id < 36) { // Hvis det ikke er den siste ruten
+        tileJson.addProperty("nextTile", id + 1);
+      }
+
+      tilesArray.add(tileJson);
+    }
+
+
+    addLadderAction(tilesArray, 3, 12);
+    addLadderAction(tilesArray, 8, 18);
+    addLadderAction(tilesArray, 22, 5);
+
+
+    boardJson.add("tiles", tilesArray);
+
+    try (FileWriter writer = new FileWriter(outputFilePath)) {
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      gson.toJson(boardJson, writer);
+    }
+  }
+  public static void generateLargeBoard(String outputFilePath) throws IOException {
+    JsonObject boardJson = new JsonObject();
+    boardJson.addProperty("rows", 12);
+    boardJson.addProperty("columns", 12);
+
+    JsonArray tilesArray = new JsonArray();
+
+    for (int id = 1; id <= 144; id++) {
+      int row = 11 - ((id - 1) / 12);
+      int col = (row % 2 == 1) ? ((id - 1) % 12) : (11 - ((id - 1) % 12));
+
+      JsonObject tileJson = new JsonObject();
+      tileJson.addProperty("id", id);
+      tileJson.addProperty("row", row);
+      tileJson.addProperty("col", col);
+
+      if (id < 144) {
+        tileJson.addProperty("nextTile", id + 1);
+      }
+
+      tilesArray.add(tileJson);
+    }
+
+
+    addLadderAction(tilesArray, 5, 25);
+    addLadderAction(tilesArray, 40, 60);
+    addLadderAction(tilesArray, 100, 120);
+    addLadderAction(tilesArray, 121, 50);
+    addLadderAction(tilesArray, 136, 111);
+
+    boardJson.add("tiles", tilesArray);
+
+    try (FileWriter writer = new FileWriter(outputFilePath)) {
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      gson.toJson(boardJson, writer);
+    }
+  }
+
+
+
+  /**
+   * Adds a skip turn action to the specified tile
+   */
+  private static void addSkipTurnAction(JsonArray tilesArray, int tileId) {
+    for (JsonElement element : tilesArray) {
+      JsonObject tile = element.getAsJsonObject();
+      if (tile.get("id").getAsInt() == tileId) {
+        JsonObject action = new JsonObject();
+        action.addProperty("type", "SkipTurnAction");
+        tile.add("action", action);
+        break;
+      }
+    }
+  }
 
   public static void main(String[] args) {
     try {
-      generateStandardBoard("src/main/resources/standard_board.json");
+      generateLargeBoard("src/main/resources/large_board.json");
       System.out.println("Board file generated successfully!");
     } catch (IOException e) {
       System.err.println("Error generating board: " + e.getMessage());
     }
   }
+
 }

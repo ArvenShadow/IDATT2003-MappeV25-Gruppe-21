@@ -14,7 +14,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
-        <javafx.version>17.0.1</javafx.version>
+        <javafx.version>21.0.1</javafx.version>
     </properties>
 
     <repositories>
@@ -188,7 +188,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        edu.ntnu.idi.idatt.gui.GameFrame
+                                        edu.ntnu.idi.idatt.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -208,7 +208,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>edu.ntnu.idi.idatt.gui.GameFrame</mainClass>
+                            <mainClass>edu.ntnu.idi.idatt.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
