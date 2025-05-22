@@ -832,7 +832,11 @@
       "id": 136,
       "row": 0,
       "col": 8,
-      "nextTile": 137
+      "nextTile": 137,
+      "action": {
+        "type": "LadderAction",
+        "destinationTileId": 111
+      }
     },
     {
       "id": 137,
