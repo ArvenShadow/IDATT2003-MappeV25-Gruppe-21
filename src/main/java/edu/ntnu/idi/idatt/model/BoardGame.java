@@ -38,6 +38,12 @@ public class BoardGame implements ObservableGame {
     }
   }
 
+  public void loadBoardFromFile(String filepath) throws Exception {
+    BoardJsonHandler boardHandler = new BoardJsonHandler();
+    this.board = boardHandler.readFromFile(filepath);
+    notifyObservers(new GameEvent(GameEventType.BOARD_CREATED, null));
+  }
+
   public void createDice(int numberOfDice) {
     this.dice = new Dice(numberOfDice);
     notifyObservers(new GameEvent(GameEventType.DICE_CREATED, null));

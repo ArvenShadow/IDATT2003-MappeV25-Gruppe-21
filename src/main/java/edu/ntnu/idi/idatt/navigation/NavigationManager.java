@@ -1,10 +1,14 @@
 package edu.ntnu.idi.idatt.navigation;
 
 import edu.ntnu.idi.idatt.controller.BoardGameController;
+import edu.ntnu.idi.idatt.controller.BoardSelectionController;
+import edu.ntnu.idi.idatt.io.BoardJsonHandler;
+import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.BoardGame;
 import edu.ntnu.idi.idatt.model.Player;
 import edu.ntnu.idi.idatt.model.PlayerData;
 import edu.ntnu.idi.idatt.view.BoardGameViewImpl;
+import edu.ntnu.idi.idatt.view.BoardSelectionView;
 import edu.ntnu.idi.idatt.view.CharacterSelectionView;
 import edu.ntnu.idi.idatt.view.MainMenuView;
 import javafx.scene.Parent;
@@ -63,6 +67,7 @@ public class NavigationManager implements NavigationHandler {
         break;
       case BOARD_SELECTION_SCREEN:
         showBoardSelectionScreen();
+        break;
       case LOAD_GAME_SCREEN:
         showLoadGameScreen();
         break;
@@ -88,7 +93,7 @@ public class NavigationManager implements NavigationHandler {
 
   private void showMainMenu() {
     MainMenuView mainMenuView = new MainMenuView();
-    mainMenuView.setNewGameHandler(() -> navigateTo(NavTo.CHARACTER_SELECTION));
+    mainMenuView.setNewGameHandler(() -> navigateTo(NavTo.BOARD_SELECTION_SCREEN));
     mainMenuView.setLoadGameHandler(() -> navigateTo(NavTo.LOAD_GAME_SCREEN));
     mainMenuView.setExitHandler(() -> primaryStage.close());
 
@@ -140,6 +145,24 @@ public class NavigationManager implements NavigationHandler {
     loadGameView.getChildren().add(backButton);
 
     setRoot(loadGameView);
+  }
+
+  private void showBoardSelectionScreen() {
+    BoardSelectionView view = new BoardSelectionView();
+    setRoot(view.getRoot());
+  }
+
+  public void selectBoardAndContinue(String filepath) {
+    try {
+      boardGame.loadBoardFromFile(filepath); // ✅ bruker metoden i BoardGame
+
+      System.out.println("Brett lastet: " + boardGame.getBoard().getNumRows() +
+              " x " + boardGame.getBoard().getNumCols());
+
+      navigateTo(NavTo.CHARACTER_SELECTION);
+    } catch (Exception e) {
+      System.err.println("Feil ved lasting av brett: " + e.getMessage());
+    }
   }
 
   private void showSettingsScreen() {
