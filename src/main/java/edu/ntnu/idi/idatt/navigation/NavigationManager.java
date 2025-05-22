@@ -156,7 +156,7 @@ public class NavigationManager implements NavigationHandler {
 
   public void selectBoardAndContinue(String filepath) {
     try {
-      boardGame.loadBoardFromFile(filepath); // ✅ bruker metoden i BoardGame
+      boardGame.loadBoardFromFile(filepath);
 
       System.out.println("Brett lastet: " + boardGame.getBoard().getNumRows() +
               " x " + boardGame.getBoard().getNumCols());
@@ -165,7 +165,7 @@ public class NavigationManager implements NavigationHandler {
     } catch (Exception e) {
       System.err.println("Feil ved lasting av brett: " + e.getMessage());
     }
-  }
+  }   //This was generated with help by ChatGPT for aid with debugging (hence the language mismatch)
 
   private void showSettingsScreen() {
     // Implementation for settings screen
