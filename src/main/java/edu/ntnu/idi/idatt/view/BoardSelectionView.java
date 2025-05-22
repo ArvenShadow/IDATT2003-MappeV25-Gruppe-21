@@ -3,6 +3,7 @@ package edu.ntnu.idi.idatt.view;
 import edu.ntnu.idi.idatt.controller.BoardSelectionController;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -62,21 +63,20 @@ public class BoardSelectionView {
         return layout;
     }
 
-    public Scene getStyledScene() {
+    public Parent getRoot() {
         BorderPane layout = getMainMenuLayout();
         layout.getStyleClass().add("main-menu");
 
-        Scene scene = new Scene(layout,800,600);
-
-
+        // Bruk stylesheets direkte på root-noden
         try {
             String css = getClass().getResource("/styles/Select_board.css").toExternalForm();
-            scene.getStylesheets().add(css);
-        } catch (NullPointerException e) {
-            System.err.println("Could not find CSS file: /styles/Select_board.css");
-            e.printStackTrace();
+            if (css != null) {
+                layout.getStylesheets().add(css); // dette fungerer
+            }
+        } catch (Exception e) {
+            System.err.println("CSS ikke funnet: " + e.getMessage());
         }
 
-        return scene;
+        return layout;
     }
 }

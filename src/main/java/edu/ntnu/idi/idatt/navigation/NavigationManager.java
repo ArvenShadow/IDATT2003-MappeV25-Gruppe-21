@@ -61,6 +61,8 @@ public class NavigationManager implements NavigationHandler {
       case GAME_SCREEN:
         showGameScreen();
         break;
+      case BOARD_SELECTION_SCREEN:
+        showBoardSelectionScreen();
       case LOAD_GAME_SCREEN:
         showLoadGameScreen();
         break;
@@ -80,8 +82,8 @@ public class NavigationManager implements NavigationHandler {
   }
 
   @Override
-  public void setRoot(Parent root) {
-    scene.setRoot(root);
+  public void setRoot(Parent newRoot) {
+    scene.setRoot(newRoot);
   }
 
   private void showMainMenu() {
