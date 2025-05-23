@@ -1,6 +1,11 @@
 package edu.ntnu.idi.idatt.model;
 
 
+/**
+ * Represents a player in a board game. Each player is identified by a name,
+ * associates with a specific board game, and has a token type. The player's
+ * position is tracked via tiles on the board.
+ */
 public class Player {
   private String name;
   private Tile currentTile;
@@ -8,6 +13,14 @@ public class Player {
   private String tokenType; // TopHat, RaceCar etc..
   private boolean skipsNextTurn = false;
 
+  /**
+   * Constructs a new Player instance associated with a specific board game.
+   *
+   * @param name      The name of the player. Must not be null or empty.
+   * @param game      The board game the player is participating in. Must not be null.
+   * @param tokenType The token type representing the player in the game. Must not be null or empty.
+   * @throws IllegalArgumentException if any parameter is null or invalid (e.g., empty name or token type).
+   */
   public Player(String name, BoardGame game, String tokenType) {
     if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("Player name cannot be null or empty");
@@ -24,6 +37,11 @@ public class Player {
     this.tokenType = tokenType;
   }
 
+  /**
+   * Places the player on the specified tile and updates the current tile of the player.
+   *
+   * @param tile The tile on which the player is to be placed. Must not be null.
+   */
   public void placeOnTile(Tile tile) {
     this.currentTile = tile;
     System.out.println(name + " is place on tile " + tile.getTileId());
@@ -31,9 +49,12 @@ public class Player {
 
   /**
    * Moves the player forward by a specified number of steps.
+   *
    * @param steps The number of steps to move
+   *
    * @throws IllegalStateException if player is not on board or target tile not found
    */
+
   public void move(int steps) {
     if (currentTile == null) {
       throw new IllegalStateException("Player not on board");
@@ -70,12 +91,14 @@ public class Player {
 
   /**
    * Checks if player has won.
+   *
    * @param finalTileId The ID of the final tile
    * @return true if player has reached or passed the final tile
    */
   public boolean hasWon(int finalTileId) {
     return currentTile != null && currentTile.getTileId() >= finalTileId;
   }
+
   public String getName() {
     return name;
   }
@@ -95,6 +118,7 @@ public class Player {
   public void setSkipsNextTurn(boolean skipsNextTurn) {
     this.skipsNextTurn = skipsNextTurn;
   }
+
   public boolean getSkipsNextTurn() {
     return skipsNextTurn;
   }
