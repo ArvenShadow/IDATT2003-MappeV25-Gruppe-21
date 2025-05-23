@@ -1,5 +1,9 @@
 package edu.ntnu.idi.idatt.navigation;
 
+/**
+ * Interface defining the navigation operations for navigating between
+ * different screens or states of an application.
+ */
 public interface NavigationHandler {
   /**
    * Navigate to a specific screen or game state.

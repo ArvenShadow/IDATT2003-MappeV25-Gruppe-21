@@ -1,5 +1,9 @@
 package edu.ntnu.idi.idatt.navigation;
 
+/**
+ * Enum representing the various screens or game states
+ * in the application to which navigation is possible.
+ */
 public enum NavTo {
   START_SCREEN,
   CHARACTER_SELECTION,
