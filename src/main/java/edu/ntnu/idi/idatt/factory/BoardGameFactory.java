@@ -28,7 +28,7 @@ public class BoardGameFactory {
   public static Board createBoard() {
     BoardJsonHandler handler = new BoardJsonHandler();
     try{
-      return handler.readFromFile("src/main/resources/standard_board.json");
+      return handler.readFromFile("src/main/resources/boards/standard_board.json");
     } catch (BoardGameException e){
       throw new RuntimeException("Could not create board from JSon file: " + e.getMessage());
     }
