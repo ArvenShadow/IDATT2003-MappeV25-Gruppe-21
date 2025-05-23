@@ -26,6 +26,13 @@ public class SettingsPanel extends VBox {
     stylePanel();
   }
 
+  /**
+   * Creates and initializes the user interface elements for the settings panel.
+   * This includes a title, a spinner for selecting the number of dice,
+   * and buttons for applying or closing the settings.
+   *
+   * @param currentDiceCount the initial number of dice to be displayed in the spinner
+   */
   private void createUI(int currentDiceCount) {
     // Title
     Label titleLabel = new Label("Settings");
@@ -60,6 +67,12 @@ public class SettingsPanel extends VBox {
     setSpacing(12);
   }
 
+  /**
+   * Configures the styling and layout for the panel.
+   * This includes setting padding, background and border styling,
+   * size constraints, and styles for specific child components such as buttons
+   * and a spinner.
+   */
   private void stylePanel() {
     setPadding(new Insets(12));
     setStyle(
@@ -84,6 +97,9 @@ public class SettingsPanel extends VBox {
     diceCountSpinner.getStyleClass().add("spinner");
   }
 
+  /**
+   * Handles the application of changes to the number of dice in the settings panel.
+   */
   private void handleApply() {
     int newDiceCount = diceCountSpinner.getValue();
     if (onDiceCountChanged != null) {
@@ -92,16 +108,30 @@ public class SettingsPanel extends VBox {
     }
   }
 
+  /**
+   * Handles the closing action of the settings panel.
+   */
   private void handleClose() {
     if (onClose != null) {
       onClose.run();
     }
   }
 
+  /**
+   * Sets a handler that will be triggered whenever the dice count is updated.
+   *
+   * @param handler a Consumer function that accepts an integer representing
+   *                the updated dice count.
+   */
   public void setOnDiceCountChanged(Consumer<Integer> handler) {
     this.onDiceCountChanged = handler;
   }
 
+  /**
+   * Sets a handler that will be called when the close action is triggered.
+   *
+   * @param handler a Runnable object that defines the behavior to execute upon the close event
+   */
   public void setOnClose(Runnable handler) {
     this.onClose = handler;
   }
@@ -110,6 +140,12 @@ public class SettingsPanel extends VBox {
     return diceCountSpinner.getValue();
   }
 
+  /**
+   * Updates the dice count displayed in the spinner to the specified value.
+   * This method modifies the value shown in the diceCountSpinner's ValueFactory.
+   *
+   * @param count the new number of dice to be displayed in the spinner
+   */
   public void updateDiceCount(int count) {
     diceCountSpinner.getValueFactory().setValue(count);
   }

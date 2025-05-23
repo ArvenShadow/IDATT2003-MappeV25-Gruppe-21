@@ -20,6 +20,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The BoardView class is responsible for rendering a visual representation of the game board and managing
+ * player interactions on the board. It extends the Pane class to provide a graphical layout for board tiles,
+ * player tokens, and other visual elements such as ladders or special tiles with actions.
+ *
+ * AI declaration: AI helped with methods where math implementation was required. As well as the animation
+ * method.
+ */
 public class BoardView extends Pane {
   private Board board;
   private Map<Integer, Rectangle> tileViews = new HashMap<>();
@@ -40,6 +48,12 @@ public class BoardView extends Pane {
     createBoardLayout();
   }
 
+  /**
+   * Constructs the visual layout for the game board, including tile rectangles, text labels,
+   * and indicators for special tile actions. This method processes each tile of the game board,
+   * setting its position, appearance, and behavior, and adds the resulting graphical elements
+   * to the visual scene of the board.
+   */
   private void createBoardLayout() {
     int numRows = board.getNumRows();
     int numCols = board.getNumCols();
@@ -96,6 +110,20 @@ public class BoardView extends Pane {
     drawConnections();
   }
 
+  /**
+   * Draws visual connections between tiles on the board that are linked by special actions,
+   * such as ladders or chutes. These connections are represented as lines between the source
+   * and destination tiles.
+   *
+   * The method iterates through all tiles of the board and checks if a tile has a special
+   * action, specifically a {@link LadderAction}. If such an action exists, a line is drawn
+   * from the source tile to the destination tile determined by the action. The line's color
+   * represents the direction of the action:
+   * - Green for moving up (ladder).
+   * - Pink for moving down (chute).
+   *
+   * The visual components for the connections are added to the current pane for display.
+   */
   private void drawConnections() {
     for (int tileId = 1; tileId <= board.getNumRows() * board.getNumCols(); tileId++) {
       Tile tile = board.getTile(tileId);
@@ -128,6 +156,16 @@ public class BoardView extends Pane {
     }
   }
 
+  /**
+   * Calculates the tile ID based on the input row, column, number of rows, and number of columns,
+   * assuming an alternating left-to-right and right-to-left numbering pattern for each row.
+   *
+   * @param row The row index of the tile, starting from the top of the grid.
+   * @param col The column index of the tile, starting from the left of the grid.
+   * @param numRows The total number of rows in the grid.
+   * @param numCols The total number of columns in the grid.
+   * @return The calculated tile ID that uniquely identifies the tile in the grid.
+   */
   private int calculateTileId(int row, int col, int numRows, int numCols) {
     int rowFromBottom = numRows - 1 - row;
     if (rowFromBottom % 2 == 0) {
@@ -137,6 +175,16 @@ public class BoardView extends Pane {
     }
   }
 
+  /**
+   * Updates the position of a player's token on the game board.
+   * If the player's token does not already exist, it is created and added to the board.
+   * The method calculates the target position based on the specified tile ID and animates the movement
+   * of the token. Player tokens are adjusted slightly to avoid overlapping if multiple players share the
+   * same tile.
+   *
+   * @param player The player whose position is being updated. Cannot be null.
+   * @param tileId The ID of the tile to which the player's token should be moved. Must correspond to a valid tile.
+   */
   public void updatePlayerPos(Player player, int tileId) {
     Rectangle tileRect = tileViews.get(tileId);
     if (tileRect == null) {
@@ -165,6 +213,16 @@ public class BoardView extends Pane {
     playerToken.toFront();
   }
 
+  /**
+   * Creates a visual token representation for a player. The token is displayed as an
+   * {@code ImageView} on the game board. If the token's image cannot be loaded, a fallback
+   * graphical representation (e.g., a colored rectangle) is used instead. The token is
+   * colored based on the player's index, cycling through a predefined list of colors.
+   *
+   * @param player The player for whom the token is being created. Must not be null and
+   *               should have a valid token type.
+   * @return An {@code ImageView} representing the player's token.
+   */
   private ImageView createPlayerToken(Player player) {
     int playerIndex = new ArrayList<>(playerTokens.keySet()).size();
     Color playerColor = PLAYER_COLORS[playerIndex % PLAYER_COLORS.length];
@@ -223,6 +281,15 @@ public class BoardView extends Pane {
     }
   }
 
+  /**
+   * Creates a visual indicator on the board to represent a skip-turn tile.
+   * The indicator consists of a red translucent circle with a dark red border
+   * and two intersecting white lines (forming an X) at its center.
+   * This method adds the graphical elements to the current pane.
+   *
+   * @param x The X-coordinate of the top-left corner of the tile where the indicator will be placed.
+   * @param y The Y-coordinate of the top-left corner of the tile where the indicator will be placed.
+   */
   private void createSkipTurnIndicator(double x, double y) {
 
     Circle blockCircle = new Circle(x + TILE_SIZE / 2, y + TILE_SIZE / 2, TILE_SIZE / 3);
@@ -254,18 +321,22 @@ public class BoardView extends Pane {
 
   }
 
-  public void clearPlayerTokens() {
-    for (ImageView playerToken : playerTokens.values()) {
-      this.getChildren().remove(playerToken);
-    }
-    playerTokens.clear();
-    playerColors.clear();
-  }
 
   public Color getPlayerColor(int playerIndex) {
     return playerColors.getOrDefault(playerIndex, Color.GRAY);
   }
 
+  /**
+   * Animates the movement of a player's token to a specified tile on the game board. If the token
+   * for the player does not exist, it is created and added to the board. The method calculates the
+   * target position based on the tile ID, animates the movement, and ensures proper positioning of
+   * tokens to avoid overlap when multiple players occupy the same tile. The token is moved to the
+   * foreground during the animation.
+   *
+   * @param player The player whose token is being animated. Must not be null.
+   * @param tileId The ID of the tile where the player's token should move. Must correspond to a valid tile.
+   * @param onComplete An optional callback to be executed after the animation completes. Can be null.
+   */
   public void animatePlayerMove(Player player, int tileId, Runnable onComplete) {
     Rectangle tileRect = tileViews.get(tileId);
     if (tileRect == null) {

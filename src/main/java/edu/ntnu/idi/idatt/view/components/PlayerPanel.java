@@ -28,6 +28,15 @@ public class PlayerPanel {
   private ImageView tokenImageView;
   private List<String> availableTokens;
 
+  /**
+   * Constructs a new PlayerPanel with the given player details and available tokens.
+   * This constructor initializes the player panel, sets up graphical components,
+   * and manages the panel's state.
+   *
+   * @param playerId The unique identifier for the player.
+   * @param active Indicates whether the player panel is initially active.
+   * @param availableTokens A list of token names available for selection in the panel.
+   */
   public PlayerPanel(int playerId, boolean active, List<String> availableTokens) {
     this.playerId = playerId;
     this.active = active;
@@ -35,6 +44,11 @@ public class PlayerPanel {
     createPanel();
   }
 
+  /**
+   * Initializes and configures the primary layout panel for the PlayerPanel.
+   * This method creates a GridPane to serve as the main container for the
+   * player panel's graphical components.
+   */
   private void createPanel() {
     pane = new GridPane();
     pane.setPadding(new Insets(10));
@@ -51,6 +65,12 @@ public class PlayerPanel {
     updatePanelState();
   }
 
+  /**
+   * Initializes and configures the components for the player panel.
+   * This method sets up various graphical elements such as labels, input fields,
+   * a combo box for token selection, and a button to toggle the panel state.
+   * The method also sets default values and visual properties for each component.
+   */
   private void createComponents() {
     Label titleLabel = new Label("Player " + playerId);
     titleLabel.setFont(javafx.scene.text.Font.font("Arial", 16));
@@ -74,6 +94,10 @@ public class PlayerPanel {
     pane.add(titleLabel, 0, 0, 2, 1);
   }
 
+  /**
+   * Arranges and positions the user interface components within the pane.
+   * This method is responsible for adding graphical elements.
+   */
   private void layoutComponents() {
     pane.add(new Label("Name:"), 0, 1);
     pane.add(nameField, 1, 1);
@@ -87,6 +111,11 @@ public class PlayerPanel {
     }
   }
 
+  /**
+   * Configures the event handlers for user interactions within the player panel.
+   * This method sets up listeners and actions for the graphical components, ensuring
+   * dynamic and interactive behavior.
+   */
   private void setupEventHandlers() {
     tokenComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
       updateTokenPreview(newVal);
@@ -98,6 +127,15 @@ public class PlayerPanel {
     });
   }
 
+  /**
+   * Updates the token preview image displayed in the UI.
+   * This method attempts to load an image corresponding to the specified token name
+   * and updates the token image view. If the token name is null or an exception occurs
+   * during image loading, the token image view is reset to null.
+   *
+   * @param tokenName The name of the token whose preview image should be displayed.
+   *                  If null, the preview image will be cleared.
+   */
   private void updateTokenPreview(String tokenName) {
     if (tokenName != null) {
       try {
@@ -113,6 +151,10 @@ public class PlayerPanel {
     }
   }
 
+  /**
+   * Updates the state of the player panel by adjusting the properties of its
+   * graphical components based on the `active` state.
+   */
   private void updatePanelState() {
     toggleButton.setText(active ? "Remove" : "Add");
     nameField.setDisable(!active);
@@ -159,6 +201,15 @@ public class PlayerPanel {
     tokenComboBox.setValue(null);
   }
 
+  /**
+   * Determines whether the player panel contains valid data.
+   * Valid data is defined as:
+   * - The panel is active.
+   * - The player's name is not null, not empty, and not composed solely of whitespace.
+   * - A token is selected from the available options.
+   *
+   * @return true if the panel contains valid data, false otherwise.
+   */
   public boolean hasValidData() {
     return active &&
       getPlayerName() != null &&

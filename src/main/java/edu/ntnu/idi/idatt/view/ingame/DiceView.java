@@ -13,6 +13,12 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DiceView represents a visual and interactive component for a collection of dice.
+ * Each die within this group can be individually rolled or have its value explicitly set.
+ * The class also displays the total value of all dice.
+ *
+ */
 public class DiceView extends Group {
   private List<SingleDieView> diceViews = new ArrayList<>();
   private Text totalText;
@@ -26,6 +32,13 @@ public class DiceView extends Group {
     this(DEFAULT_DICE_COUNT);
   }
 
+  /**
+   * Constructs a DiceView with the specified number of dice.
+   * Initializes and arranges the dice views inside an HBox container,
+   * and displays the total of the dice values.
+   *
+   * @param diceCount the number of dice to create and display
+   */
   public DiceView(int diceCount) {
     diceContainer = new HBox(DIE_SPACING);
     diceContainer.setPadding(new Insets(5));
@@ -45,6 +58,14 @@ public class DiceView extends Group {
     setValues(new int[diceCount]);
   }
 
+  /**
+   * Sets the values for the dice views based on the provided array of integers.
+   * If the provided array has fewer elements than the number of dice, the remaining
+   * dice are set to a default value of 1. Updates the total displayed text accordingly.
+   *
+   * @param values an array of integers representing the values to set for each die
+   *               in the dice view. Values outside the valid range are clamped to 1.
+   */
   public void setValues(int[] values) {
     // Use the minimum length to avoid index errors
     int length = Math.min(values.length, diceViews.size());
@@ -75,6 +96,12 @@ public class DiceView extends Group {
     }
   }
 
+  /**
+   * Represents a single die view with a graphical representation of its value.
+   * The die is represented as a square with rounded corners and black dots indicating
+   * the value. This class provides functionality for updating the die's value and
+   * animating a roll transition.
+   */
   private static class SingleDieView extends Group {
     private final Rectangle dice;
     private final Circle[] dots;
@@ -168,6 +195,9 @@ public class DiceView extends Group {
       return value;
     }
 
+    /**
+     * Animates the rolling of the die using a rotation transition.
+     */
     public void roll() {
       // Animate the die roll
       RotateTransition rotation = new RotateTransition(Duration.millis(500), this);

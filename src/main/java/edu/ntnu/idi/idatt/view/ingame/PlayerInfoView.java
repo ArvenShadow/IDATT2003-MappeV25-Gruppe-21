@@ -11,6 +11,11 @@ import javafx.scene.text.FontWeight;
 
 import java.util.List;
 
+
+/**
+ * PlayerInfoView is a custom JavaFX VBox component that displays information about a list of players
+ * in a board game, including their name, current position, token type, and a color indicator for each player.
+ */
 public class PlayerInfoView extends VBox {
   private List<Player> players;
 
@@ -28,6 +33,15 @@ public class PlayerInfoView extends VBox {
     updatePlayerInfo(boardView);
   }
 
+
+  /**
+   * Updates the player information displayed in the PlayerInfoView.
+   * This method clears any existing player data and dynamically rebuilds the view
+   * based on the current state of the players and their associated attributes.
+   *
+   * @param boardView the BoardView instance used to retrieve player-specific visual details
+   *                  such as color indicators for each player.
+   */
   public void updatePlayerInfo(BoardView boardView) {
     while(getChildren().size() > 1) {
       getChildren().remove(1);
