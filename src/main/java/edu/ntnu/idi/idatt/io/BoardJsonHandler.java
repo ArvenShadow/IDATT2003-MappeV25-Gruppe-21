@@ -9,11 +9,15 @@ import edu.ntnu.idi.idatt.exception.BoardGameException;
 import edu.ntnu.idi.idatt.exception.InvalidBoardConfigurationException;
 import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.Tile;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Handles reading from and writing to JSON files for the {@link Board} object.
+ * This class implements file handling and serialization logic specific to
+ * board state persistence.
+ */
 public class BoardJsonHandler implements FileHandler<Board> {
 
   @Override
@@ -29,6 +33,23 @@ public class BoardJsonHandler implements FileHandler<Board> {
     }
   }
 
+  /**
+   * Writes a Board object to a file in JSON format.
+   *
+   * <p>The method serializes the given Board object into a JSON representation
+   * and saves it to the specified file. If there are any issues during file
+   * writing (e.g., file not writable, directory does not exist), a
+   * BoardGameException is thrown.
+   *</p>
+   *
+   * @param board    The Board object to be serialized and written to the file.
+   *                 It contains the configuration of tiles, rows, and columns.
+   * @param filename The name of the file to which the JSON data representing
+   *                 the Board object will be written. Should include the file
+   *                 path if necessary.
+   * @throws BoardGameException If an I/O error occurs during the writing process
+   *                            or if the file cannot be created or modified.
+   */
   @Override
   public void writeToFile(Board board, String filename) throws BoardGameException {
     try {

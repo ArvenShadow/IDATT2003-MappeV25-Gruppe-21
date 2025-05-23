@@ -1,11 +1,25 @@
 package edu.ntnu.idi.idatt.io;
 
 import com.google.gson.*;
-
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The BoardJsonGenerator class is responsible for generating board configurations
+ * in JSON format for various board sizes. Each board includes tiles with properties
+ * like ID, row, column, next tile, and actions such as ladders, chutes, or skip turns.
+ * The generated JSON files can be saved to specified file paths.
+ */
 public class BoardJsonGenerator {
+
+  /**
+   * Generates a JSON representation of a standard 10x10 board game with ladders, chutes, and other actions,
+   * and writes it to the specified file path.
+   *
+   * @param outputFilePath the file path where the generated JSON board will be written
+   * @throws IOException if an I/O error occurs while writing to the specified file
+   */
+
   public static void generateStandardBoard(String outputFilePath) throws IOException {
     JsonObject boardJson = new JsonObject();
     boardJson.addProperty("rows", 10);
@@ -14,6 +28,7 @@ public class BoardJsonGenerator {
     JsonArray tilesArray = new JsonArray();
 
     // Generate all tiles
+    // Math implemented with help of AI
     for (int id = 1; id <= 100; id++) {
       int row = 9 - ((id - 1) / 10);
       int col = (row % 2 == 1) ? ((id - 1) % 10) : (9 - ((id - 1) % 10));
@@ -67,7 +82,13 @@ public class BoardJsonGenerator {
   }
 
   /**
-   * Adds a ladder action (up or down) to the specified tile
+   * Adds a ladder action to a specific tile within the provided JSON array of tiles.
+   * Updates the tile with the specified ID by associating a ladder action,
+   * which redirects to a destination tile ID.
+   *
+   * @param tilesArray the JSON array containing all tile objects
+   * @param tileId the ID of the tile to which the ladder action is to be added
+   * @param destinationId the ID of the destination tile where the ladder leads
    */
   private static void addLadderAction(JsonArray tilesArray, int tileId, int destinationId) {
     for (JsonElement element : tilesArray) {
@@ -81,6 +102,15 @@ public class BoardJsonGenerator {
       }
     }
   }
+
+
+  /**
+   * Generates a JSON representation of a small 6x6 board game with a predefined configuration
+   * including rows, columns, tiles, and ladder actions, and writes it to the specified file path.
+   *
+   * @param outputFilePath the file path where the generated JSON board will be written
+   * @throws IOException if an I/O error occurs while writing to the specified file
+   */
   public static void generateSmallBoard(String outputFilePath) throws IOException {
     JsonObject boardJson = new JsonObject();
     boardJson.addProperty("rows", 6);
@@ -97,7 +127,7 @@ public class BoardJsonGenerator {
       tileJson.addProperty("row", row);
       tileJson.addProperty("col", col);
 
-      if (id < 36) { // Hvis det ikke er den siste ruten
+      if (id < 36) {
         tileJson.addProperty("nextTile", id + 1);
       }
 
@@ -117,6 +147,15 @@ public class BoardJsonGenerator {
       gson.toJson(boardJson, writer);
     }
   }
+
+  /**
+   * Generates a JSON representation of a large 12x12 board game with a specific configuration,
+   * including rows, columns, tile positions, and ladder actions. The generated JSON board is
+   * written to the specified file path.
+   *
+   * @param outputFilePath the file path where the generated JSON board will be saved
+   * @throws IOException if an I/O error occurs while writing to the specified file
+   */
   public static void generateLargeBoard(String outputFilePath) throws IOException {
     JsonObject boardJson = new JsonObject();
     boardJson.addProperty("rows", 12);
@@ -156,10 +195,15 @@ public class BoardJsonGenerator {
   }
 
 
-
   /**
-   * Adds a skip turn action to the specified tile
+   * Adds a SkipTurnAction to a specific tile within the provided JSON array of tiles.
+   * Updates the tile with the specified ID by associating a SkipTurnAction.
+   * If the tile with the given ID is found, the action is added, and the loop terminates.
+   *
+   * @param tilesArray the JSON array containing all tile objects
+   * @param tileId the ID of the tile to which the SkipTurnAction is to be added
    */
+
   private static void addSkipTurnAction(JsonArray tilesArray, int tileId) {
     for (JsonElement element : tilesArray) {
       JsonObject tile = element.getAsJsonObject();
@@ -172,10 +216,32 @@ public class BoardJsonGenerator {
     }
   }
 
+  /**
+   * The main method serves as the entry point for the application. It sequentially generates
+   * board configurations of various sizes (large, small, and standard) and saves them as JSON
+   * files in the specified file paths. If any IOException occurs during the file writing process,
+   * an error message is displayed in the console.
+   *
+   * @param args an array of command-line arguments provided to the program, though not used in this implementation
+   */
   public static void main(String[] args) {
     try {
-      generateLargeBoard("src/main/resources/large_board.json");
-      System.out.println("Board file generated successfully!");
+      generateLargeBoard("src/main/resources/boards/large_board.json");
+      System.out.println("Large Board file generated successfully!");
+    } catch (IOException e) {
+      System.err.println("Error generating board: " + e.getMessage());
+    }
+
+    try {
+      generateSmallBoard("src/main/resources/boards/small_board.json");
+      System.out.println("Small Board file generated successfully!");
+    } catch (IOException e) {
+      System.err.println("Error generating board: " + e.getMessage());
+    }
+
+    try {
+      generateStandardBoard("src/main/resources/boards/standard_board.json");
+      System.out.println("Standard Board file generated successfully!");
     } catch (IOException e) {
       System.err.println("Error generating board: " + e.getMessage());
     }
