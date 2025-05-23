@@ -168,7 +168,7 @@ class BoardGameTest {
   @Test
   @DisplayName("loadBoardFromFile() loads board")
   void testLoadBoardFromFile() throws Exception {
-    game.loadBoardFromFile("src/main/resources/standard_board.json");
+    game.loadBoardFromFile("src/main/resources/boards/standard_board.json");
 
     assertNotNull(game.getBoard());
     assertEquals(10, game.getBoard().getNumRows());
