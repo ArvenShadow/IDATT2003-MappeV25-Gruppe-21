@@ -32,12 +32,24 @@ public class ClippyNotification extends VBox {
   private Label messageLabel;
   private SequentialTransition animation;
 
+  /**
+   * Creates an instance of the ClippyNotification class.
+   * The notification consists of a UI layout featuring an animated Clippy-like character,
+   * a speech bubble, and a message label, designed for displaying brief notifications to the user.
+   */
+
   public ClippyNotification() {
     createUI();
     setupAnimation();
     setVisible(false);
     setManaged(false);
   }
+
+  /**
+   * Initializes and constructs the user interface components for the ClippyNotification.
+   * The method defines a layout consisting of an animated Clippy character, a speech bubble
+   * for displaying messages, and a tail connecting the speech bubble to Clippy.
+   */
 
   private void createUI() {
     // Load Clippy image
@@ -59,12 +71,12 @@ public class ClippyNotification extends VBox {
     speechBubble = new VBox();
     speechBubble.setPadding(new Insets(12, 16, 12, 16));
     speechBubble.setStyle(
-      "-fx-background-color: #ffffff; " +
-        "-fx-border-color: #2c3e50; " +
-        "-fx-border-width: 2px; " +
-        "-fx-border-radius: 12px; " +
-        "-fx-background-radius: 12px; " +
-        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 3, 3);"
+        "-fx-background-color: #ffffff; "
+        + "-fx-border-color: #2c3e50; "
+        + "-fx-border-width: 2px; "
+        + "-fx-border-radius: 12px; "
+        + "-fx-background-radius: 12px; "
+        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 3, 3);"
     );
     speechBubble.setMaxWidth(280);
     speechBubble.setMinWidth(200);
@@ -83,9 +95,9 @@ public class ClippyNotification extends VBox {
     // Create speech bubble tail pointing to Clippy
     Polygon tail = new Polygon();
     tail.getPoints().addAll(new Double[]{
-      0.0, 0.0,
-      18.0, -12.0,
-      18.0, 12.0
+        0.0, 0.0,
+        18.0, -12.0,
+        18.0, 12.0
     });
     tail.setFill(Color.WHITE);
     tail.setStroke(Color.web("#2c3e50"));
@@ -134,6 +146,7 @@ public class ClippyNotification extends VBox {
 
   /**
    * Shows a notification with the given message.
+   *
    * @param message The message to display
    */
   public void showNotification(String message) {
@@ -143,6 +156,7 @@ public class ClippyNotification extends VBox {
 
   /**
    * Shows a notification with title and message.
+   *
    * @param title The title of the notification
    * @param message The message content
    */

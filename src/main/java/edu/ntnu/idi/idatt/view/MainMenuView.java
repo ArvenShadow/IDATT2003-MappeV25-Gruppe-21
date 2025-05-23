@@ -10,12 +10,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+/**
+ * Represents the main menu view of the application. This class is responsible for creating
+ * and managing the user interface of the main menu, which includes options for starting a
+ * new game and exiting the application.
+ */
 public class MainMenuView {
   private BorderPane root;
   private Runnable newGameHandler;
-  private Runnable loadGameHandler;
+  //private Runnable loadGameHandler;
   private Runnable exitHandler;
 
+  /**
+   * Constructs a new instance of the MainMenuView class.
+   * This constructor initializes the user interface of the main menu by calling
+   * the createUI method, which sets up the layout and components for the menu,
+   * including buttons for starting a new game, and exiting the application.
+   */
   public MainMenuView() {
     createUI();
   }
@@ -32,11 +43,11 @@ public class MainMenuView {
     titleLabel.getStyleClass().add("title-label");
 
     Button newGameButton = new Button("New Game");
-    Button loadGameButton = new Button("Load Game");
+    //Button loadGameButton = new Button("Load Game");
     Button exitButton = new Button("Exit");
 
 
-    for (Button button : new Button[]{newGameButton, loadGameButton, exitButton}) {
+    for (Button button : new Button[]{newGameButton, exitButton}) {
       button.setPrefWidth(200);
       button.setPrefHeight(40);
       button.getStyleClass().add("menu-button");
@@ -47,11 +58,11 @@ public class MainMenuView {
         newGameHandler.run();
       }
     });
-    loadGameButton.setOnAction(e -> {
-      if (loadGameHandler != null) {
-        loadGameHandler.run();
-      }
-    });
+//    loadGameButton.setOnAction(e -> {
+//      if (loadGameHandler != null) {
+//        loadGameHandler.run();
+//      }
+//    });
     exitButton.setOnAction(e -> {
       if (exitHandler != null) {
         exitHandler.run();
@@ -61,7 +72,7 @@ public class MainMenuView {
 
     VBox menuBox = new VBox(20);
     menuBox.setAlignment(Pos.CENTER);
-    menuBox.getChildren().addAll(titleLabel, newGameButton, loadGameButton, exitButton);
+    menuBox.getChildren().addAll(titleLabel, newGameButton, exitButton);
 
 
     root.setCenter(menuBox);
@@ -75,9 +86,9 @@ public class MainMenuView {
     this.newGameHandler = handler;
   }
 
-  public void setLoadGameHandler(Runnable handler) {
-    this.loadGameHandler = handler;
-  }
+//  public void setLoadGameHandler(Runnable handler) {
+//    this.loadGameHandler = handler;
+//  }
 
   public void setExitHandler(Runnable handler) {
     this.exitHandler = handler;

@@ -3,10 +3,14 @@ package edu.ntnu.idi.idatt.view;
 import edu.ntnu.idi.idatt.action.TileAction;
 import edu.ntnu.idi.idatt.model.Board;
 import edu.ntnu.idi.idatt.model.Player;
+import java.util.List;
 import javafx.scene.Parent;
 
-import java.util.List;
-
+/**
+ * Interface for defining the view component of a board game in an MVC architecture.
+ * The BoardGameView is responsible for rendering the game state, displaying updates
+ * related to players, moves, and game actions, and managing user interactions through handlers.
+ */
 public interface BoardGameView {
   void renderBoard(Board board);
   void updatePlayersList(List<Player> players);
@@ -29,6 +33,7 @@ public interface BoardGameView {
   Parent getRoot();
 
 
+  void setReturnToMenuHandler(Runnable handler);
   void setRollDiceHandler(Runnable handler);
   void setNewGameHandler(Runnable handler);
   void setLoadGameHandler(Runnable handler);

@@ -3,6 +3,9 @@ package edu.ntnu.idi.idatt.view;
 import edu.ntnu.idi.idatt.controller.CharacterSelectionController;
 import edu.ntnu.idi.idatt.model.PlayerData;
 import edu.ntnu.idi.idatt.view.components.PlayerPanel;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -10,10 +13,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * The CharacterSelectionView class is responsible for constructing and managing
+ * the user interface for selecting players and their tokens in the game. It provides
+ * functionalities for adding player details, managing file operations like saving
+ * and loading player configurations, and navigating between screens.
+ */
 public class CharacterSelectionView {
   private BorderPane root;
   private List<PlayerPanel> playerPanels;
@@ -27,6 +32,12 @@ public class CharacterSelectionView {
 
   private CharacterSelectionController controller;
 
+  /**
+   * Constructs a new instance of the CharacterSelectionView class.
+   * This constructor initializes the character selection view.
+   * This class serves as the primary view component for managing the process of
+   * selecting player characters in the application.
+   */
   public CharacterSelectionView() {
     initializeTokens();
     createUI();
@@ -35,6 +46,12 @@ public class CharacterSelectionView {
     this.controller = new CharacterSelectionController(this);
   }
 
+  /**
+   * Initializes the list of available player tokens for the application.
+   * The tokens represent distinct options that can be selected by players.
+   * This method populates the `availableTokens` list with predefined token names.
+   * Tokens include "TopHat," "RaceCar," "Shoe," "Thimble," and "Cat."
+   */
   private void initializeTokens() {
     availableTokens = new ArrayList<>();
     availableTokens.add("TopHat");
@@ -44,6 +61,11 @@ public class CharacterSelectionView {
     availableTokens.add("Cat");
   }
 
+  /**
+   * Constructs and initializes the user interface for character selection.
+   * This method assembles various UI components, including a title label,
+   * player configuration panels, and buttons for file operations and navigation.
+   */
   private void createUI() {
     root = new BorderPane();
     root.setPadding(new Insets(20));
@@ -68,6 +90,13 @@ public class CharacterSelectionView {
     root.setCenter(contentBox);
   }
 
+  /**
+   * Creates and initializes a GridPane containing player panels for setting up players.
+   * Each player panel represents a graphical interface for configuring a player.
+   * By default, the first two player panels are active, while the remaining two are inactive.
+   *
+   * @return A GridPane containing the player panels arranged in a 2x2 grid.
+   */
   private GridPane createPlayerPanels() {
     playerPanels = new ArrayList<>();
     GridPane playersGrid = new GridPane();
@@ -87,6 +116,12 @@ public class CharacterSelectionView {
 
     return playersGrid;
   }
+
+  /**
+   * Creates a horizontal box containing buttons for saving and loading player data.
+   *
+   * @return an HBox containing the save and load buttons for file operations
+   */
 
   private HBox createFileOperationButtons() {
     Button savePlayersButton = new Button("Save Players");
@@ -109,6 +144,14 @@ public class CharacterSelectionView {
     return fileOperationBox;
   }
 
+  /**
+   * Creates a horizontal box containing navigation buttons for the user interface.
+   * The box includes a "Back" button that triggers the backHandler action,
+   * and a "Start Game" button that triggers the startGameHandler action if validation succeeds.
+   * The buttons are aligned centrally within the box.
+   *
+   * @return an HBox containing the navigation buttons ("Back" and "Start Game")
+   */
   private HBox createNavigationButtons() {
     Button backButton = new Button("Back");
     Button startButton = new Button("Start Game");
@@ -131,12 +174,24 @@ public class CharacterSelectionView {
     return navigationBox;
   }
 
+  /**
+   * Validates the selected players and triggers the start game process if validation succeeds.
+   *
+   * @return true if the selected players pass all validation checks, false otherwise
+   */
   private boolean validateAndStart() {
     List<PlayerData> selectedPlayers = getSelectedPlayers();
     return controller.validatePlayerSelection(selectedPlayers);
   }
 
-  // Public methods for controller interaction
+  /**
+   * Retrieves a list of active players based on the current data in the player panels.
+   * An active player is defined as a panel that has valid data, including a non-empty
+   * name and a selected token.
+   *
+   * @return a list of PlayerData objects representing active players. Each PlayerData
+   *         object contains the name and selected token of a valid player.
+   */
   public List<PlayerData> getActivePlayers() {
     List<PlayerData> activePlayers = new ArrayList<>();
     for (PlayerPanel panel : playerPanels) {
@@ -150,6 +205,14 @@ public class CharacterSelectionView {
     return activePlayers;
   }
 
+  /**
+   * Retrieves a list of selected players configured in the player panels.
+   * A player is included in the list if their corresponding panel is active.
+   * Each selected player is represented by a PlayerData object, which contains
+   * the player's name and chosen token.
+   *
+   * @return a list of PlayerData objects representing the selected players.
+   */
   public List<PlayerData> getSelectedPlayers() {
     List<PlayerData> selectedPlayers = new ArrayList<>();
     for (PlayerPanel panel : playerPanels) {
@@ -163,6 +226,15 @@ public class CharacterSelectionView {
     return selectedPlayers;
   }
 
+  /**
+   * Updates the state of the player panels based on the provided list of player data.
+   * This method resets all player panels to their default state and then updates
+   * each panel with the corresponding data from the list, activating and assigning
+   * the player's name and token as specified.
+   *
+   * @param playerDataList A list of PlayerData objects representing the players
+   *                       whose information will be used to update the player panels.
+   */
   public void updatePlayersFromData(List<PlayerData> playerDataList) {
     // Reset all panels
     for (PlayerPanel panel : playerPanels) {
@@ -183,6 +255,14 @@ public class CharacterSelectionView {
     }
   }
 
+  /**
+   * Displays a Save File dialog to the user, allowing the user to specify the
+   * location and name of a file to save data. The dialog enforces the ".csv" file
+   * extension and sets a default file name and directory.
+   *
+   * @return the absolute path of the file chosen by the user, or null if
+   *         the dialog was cancelled or no file was selected.
+   */
   public String showSaveDialog() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Players");
@@ -196,6 +276,13 @@ public class CharacterSelectionView {
     return file != null ? file.getAbsolutePath() : null;
   }
 
+  /**
+   * Displays a "Load File" dialog to the user, allowing them to select a file for loading player data.
+   * The dialog restricts the file selection to `.csv` files and opens in a predefined directory.
+   *
+   * @return the absolute path of the selected file if a file is chosen, or null if the dialog is cancelled.
+   */
+
   public String showLoadDialog() {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Load Players");
@@ -208,6 +295,14 @@ public class CharacterSelectionView {
     return file != null ? file.getAbsolutePath() : null;
   }
 
+  /**
+   * Displays an alert dialog with the specified title, message, and alert type.
+   * The alert type determines the visual style and icon of the dialog.
+   *
+   * @param title the title of the alert dialog
+   * @param message the content message displayed in the alert dialog
+   * @param alertType the type of the alert, e.g., "WARNING", "ERROR", "INFORMATION"
+   */
   public void showAlert(String title, String message, String alertType) {
     Alert.AlertType type = switch (alertType) {
       case "WARNING" -> Alert.AlertType.WARNING;
