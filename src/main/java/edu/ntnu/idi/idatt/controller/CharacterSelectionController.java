@@ -90,8 +90,6 @@ public class CharacterSelectionController {
         view.updatePlayersFromData(playerDataList);
 
         String fileName = new File(filename).getName();
-        view.showAlert("Success",
-            "Players loaded successfully from " + fileName, "INFORMATION");
       }
 
     } catch (BoardGameException e) {
