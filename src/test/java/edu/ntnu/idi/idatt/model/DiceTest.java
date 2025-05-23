@@ -56,7 +56,7 @@ class DiceTest {
   @Test
   @DisplayName("Roll() returns sum of all dice")
   void testRollReturnsTotal() {
-    int total = dice.Roll();
+    int total = dice.roll();
     assertTrue(total >= 2 && total <= 12,
       "Two dice should sum between 2-12, but got " + total);
 
@@ -81,7 +81,7 @@ class DiceTest {
   @Test
   @DisplayName("getDie() returns individual die value")
   void testGetDie() {
-    dice.Roll();
+    dice.roll();
 
     // Test valid indices
     assertTrue(dice.getDie(0) >= 1 && dice.getDie(0) <= 6);
@@ -95,7 +95,7 @@ class DiceTest {
   @Test
   @DisplayName("getLastRoll() returns copy of array")
   void testGetLastRollReturnsCopy() {
-    dice.Roll();
+    dice.roll();
     int[] firstCall = dice.getLastRoll();
     int[] secondCall = dice.getLastRoll();
 
@@ -133,7 +133,7 @@ class DiceTest {
     Set<Integer> totals = new HashSet<>();
 
     for (int i = 0; i < 100; i++) {
-      totals.add(dice.Roll());
+      totals.add(dice.roll());
     }
 
     // With 2 dice, should get multiple different totals
