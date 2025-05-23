@@ -13,6 +13,11 @@ import javafx.scene.paint.Color;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A graphical panel representing a player in a game. The panel allows user interaction for
+ * setting the player's name, selecting a token, and toggling the active state of the player.
+ * It uses JavaFX components to provide a visual layout and manages internal state accordingly.
+ */
 public class PlayerPanel {
   private final int playerId;
   private boolean active;
