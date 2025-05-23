@@ -15,6 +15,8 @@ public class BoardJsonGenerator {
   /**
    * Generates a JSON representation of a standard 10x10 board game with ladders, chutes, and other actions,
    * and writes it to the specified file path.
+   * AI has helped in creating these methods due to the filewriting and math not being
+   * fully understood by us.
    *
    * @param outputFilePath the file path where the generated JSON board will be written
    * @throws IOException if an I/O error occurs while writing to the specified file
@@ -134,10 +136,20 @@ public class BoardJsonGenerator {
       tilesArray.add(tileJson);
     }
 
+    //ladders
+    addLadderAction(tilesArray, 4, 14);
+    addLadderAction(tilesArray, 9, 31);
+    addLadderAction(tilesArray, 20, 33);
 
-    addLadderAction(tilesArray, 3, 12);
-    addLadderAction(tilesArray, 8, 18);
-    addLadderAction(tilesArray, 22, 5);
+    //chutes
+    addLadderAction(tilesArray, 17, 7);
+    addLadderAction(tilesArray, 23, 10);
+    addLadderAction(tilesArray, 35, 2);
+
+    //skipturns
+    addSkipTurnAction(tilesArray, 8);
+    addSkipTurnAction(tilesArray, 15);
+    addSkipTurnAction(tilesArray, 22);
 
 
     boardJson.add("tiles", tilesArray);
@@ -179,12 +191,41 @@ public class BoardJsonGenerator {
       tilesArray.add(tileJson);
     }
 
+    // Add ladder actions (going up)
+    addLadderAction(tilesArray, 4, 14);
+    addLadderAction(tilesArray, 9, 31);
+    addLadderAction(tilesArray, 20, 38);
+    addLadderAction(tilesArray, 28, 84);
+    addLadderAction(tilesArray, 40, 59);
+    addLadderAction(tilesArray, 51, 67);
+    addLadderAction(tilesArray, 63, 81);
+    addLadderAction(tilesArray, 65, 83);
+    addLadderAction(tilesArray, 78, 87);
+    addLadderAction(tilesArray, 92, 120);
 
-    addLadderAction(tilesArray, 5, 25);
-    addLadderAction(tilesArray, 40, 60);
-    addLadderAction(tilesArray, 100, 120);
-    addLadderAction(tilesArray, 121, 50);
-    addLadderAction(tilesArray, 136, 111);
+
+    // Add chute actions (going down)
+    addLadderAction(tilesArray, 17, 7);
+    addLadderAction(tilesArray, 54, 34);
+    addLadderAction(tilesArray, 62, 19);
+    addLadderAction(tilesArray, 87, 24);
+    addLadderAction(tilesArray, 93, 73);
+    addLadderAction(tilesArray, 99, 78);
+    addLadderAction(tilesArray, 101, 79);
+    addLadderAction(tilesArray, 119, 82);
+    addLadderAction(tilesArray, 139, 3);
+
+    // Add skip turn actions
+    addSkipTurnAction(tilesArray, 8);
+    addSkipTurnAction(tilesArray, 15);
+    addSkipTurnAction(tilesArray, 33);
+    addSkipTurnAction(tilesArray, 47);
+    addSkipTurnAction(tilesArray, 58);
+    addSkipTurnAction(tilesArray, 77);
+    addSkipTurnAction(tilesArray, 89);
+    addSkipTurnAction(tilesArray, 100);
+    addSkipTurnAction(tilesArray, 118);
+    addSkipTurnAction(tilesArray, 138);
 
     boardJson.add("tiles", tilesArray);
 
